@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import type { LotteryDraw } from '@/types/lottery';
 import { WithId } from 'mongodb';
+import { format } from "date-fns";
 
 export async function GET(request: Request) {
   try {
@@ -16,6 +17,13 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const date = searchParams.get('date');
     const limit = parseInt(searchParams.get('limit') || '10');
+    
+    if (!date) {
+      return NextResponse.json(
+        { error: "Date parameter is required" },
+        { status: 400 }
+      );
+    }
     
     let query = {};
     if (date) {
@@ -45,3 +53,5 @@ export async function GET(request: Request) {
     );
   }
 }
+
+export const dynamic = "force-dynamic";
