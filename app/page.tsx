@@ -8,6 +8,14 @@ import type { LotteryDraw } from "@/types/lottery"
 import { WithId } from "mongodb"
 import { differenceInDays, addDays, isSaturday, isWednesday, nextWednesday, nextSaturday, format } from "date-fns"
 import { Timer, Calendar } from "lucide-react"
+import { Metadata } from "next"
+import { constructMetadata } from "./seo.config"
+
+export const metadata: Metadata = constructMetadata({
+  title: "Latest Irish Lotto Results & Winning Numbers",
+  description: "Get the latest Irish Lotto results, winning numbers, and jackpot information. Check if you've won in the most recent Irish National Lottery draw.",
+  type: "website"
+})
 
 async function getLotteryResults(): Promise<{
   latest: WithId<LotteryDraw>;
@@ -46,20 +54,20 @@ async function getLotteryResults(): Promise<{
 }
 
 function getNextDrawDate(lastDrawDate: Date): Date {
-  const today = new Date()
+  // Always use the lastDrawDate as the base for calculating next draw
   
-  // If today is Wednesday, next draw is Saturday
-  if (isWednesday(today)) {
-    return nextSaturday(today)
+  // If last draw was Wednesday, next draw is Saturday
+  if (isWednesday(lastDrawDate)) {
+    return nextSaturday(lastDrawDate)
   }
-  // If today is Saturday, next draw is Wednesday
-  else if (isSaturday(today)) {
-    return nextWednesday(today)
+  // If last draw was Saturday, next draw is next Wednesday
+  else if (isSaturday(lastDrawDate)) {
+    return nextWednesday(addDays(lastDrawDate, 1))
   }
-  // For other days, get the nearest Wednesday or Saturday
+  // For other days, get the nearest Wednesday or Saturday from the last draw date
   else {
-    const nextWed = nextWednesday(today)
-    const nextSat = nextSaturday(today)
+    const nextWed = nextWednesday(lastDrawDate)
+    const nextSat = nextSaturday(lastDrawDate)
     return nextWed < nextSat ? nextWed : nextSat
   }
 }
@@ -115,13 +123,14 @@ function ResultBox({
 export default async function Home() {
   const { latest: currentData, pastResults } = await getLotteryResults();
   
-  // Check if latest results are more than 1 day old
+  // Check if latest results are more than 2 days old
   const daysSinceLastDraw = differenceInDays(
     new Date(),
     new Date(currentData.drawDate)
   );
   
-  const showComingSoon = daysSinceLastDraw >= 1;
+  // Show coming soon if latest result is more than 2 days old
+  const showComingSoon = daysSinceLastDraw >= 2;
   const nextDrawDate = showComingSoon ? getNextDrawDate(new Date(currentData.drawDate)) : null;
   const nextDrawDateString = nextDrawDate ? format(nextDrawDate, 'yyyy-MM-dd') : '';
 
@@ -265,8 +274,12 @@ export default async function Home() {
           </table>
         </div>
         <div className="mt-4 text-center">
-          <Link href="/results/archive" passHref>
-            <Button variant="outline">View All Past Results</Button>
+          <Link
+            href="/results/history"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-green-600 transition-all duration-200 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 hover:text-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+          >
+            <Calendar className="w-4 h-4" />
+            View Past Results
           </Link>
         </div>
       </div>

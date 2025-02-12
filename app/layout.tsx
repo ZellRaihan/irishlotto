@@ -1,14 +1,23 @@
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import "./globals.css"
-import Link from "next/link"
-import type React from "react"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
+import { constructMetadata } from './seo.config'
+import JsonLd from '@/components/json-ld'
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Irish Lottery Results",
-  description: "Check the latest Irish Lottery results and archives",
+  ...constructMetadata({
+    title: "Irish Lotto Results",
+    description: "Get the latest Irish Lotto results, check winning numbers, and view historical draws. Your trusted source for Irish National Lottery information.",
+  }),
+  icons: {
+    icon: '/Irish Lotto Results.webp',
+    shortcut: '/Irish Lotto Results.webp',
+    apple: '/Irish Lotto Results.webp',
+  }
 }
 
 export default function RootLayout({
@@ -17,37 +26,23 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen bg-background antialiased`}>
-        <div className="relative flex min-h-screen flex-col">
-          <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="container flex h-14 items-center">
-              <div className="mr-4 flex">
-                <Link href="/" className="mr-6 flex items-center space-x-2">
-                  <span className="font-bold">Irish Lotto Results</span>
-                </Link>
-              </div>
-              <nav className="flex items-center space-x-6 text-sm font-medium">
-                <Link
-                  href="/"
-                  className="transition-colors hover:text-foreground/80 text-foreground"
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/results/archive"
-                  className="transition-colors hover:text-foreground/80 text-foreground"
-                >
-                  Archive
-                </Link>
-              </nav>
-            </div>
-          </header>
-          <div className="flex-1">
-            <div className="container py-6">
+    <html lang="en">
+      <head>
+        <link rel="icon" href="/Irish Lotto Results.webp" type="image/webp" />
+        <link rel="shortcut icon" href="/Irish Lotto Results.webp" type="image/webp" />
+        <link rel="apple-touch-icon" href="/Irish Lotto Results.webp" />
+      </head>
+      <body className={inter.className}>
+        <div className="relative min-h-screen flex flex-col">
+          <JsonLd type="Website" />
+          <JsonLd type="Organization" />
+          <Header />
+          <main className="flex-1">
+            <div className="py-6">
               {children}
             </div>
-          </div>
+          </main>
+          <Footer />
         </div>
       </body>
     </html>
