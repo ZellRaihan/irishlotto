@@ -13,10 +13,17 @@ import { constructMetadata } from "@/app/seo.config"
 import { checkResultExists } from "./not-found"
 import { isSaturday, isWednesday, nextWednesday, nextSaturday, format, addDays, differenceInDays } from "date-fns"
 
+// Add dynamic fetch options
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 async function getLotteryResult(date: string): Promise<LotteryDraw | null> {
   try {
     const client = await clientPromise;
     const db = client.db("lottery");
+    
+    // Add cache-busting timestamp
+    const currentTimestamp = new Date().getTime()
     
     const result = await db
       .collection<LotteryDraw>("lottoresults")

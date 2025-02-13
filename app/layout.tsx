@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   }
 }
 
+export const revalidate = 0; // Disable caching for all pages
+
 export default function RootLayout({
   children,
 }: {
@@ -28,6 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
         <link rel="icon" href="/Irish Lotto Results.webp" type="image/webp" />
         <link rel="shortcut icon" href="/Irish Lotto Results.webp" type="image/webp" />
         <link rel="apple-touch-icon" href="/Irish Lotto Results.webp" />

@@ -12,10 +12,14 @@ import { Metadata } from "next"
 import { constructMetadata } from "./seo.config"
 
 export const metadata: Metadata = constructMetadata({
-  title: "Latest Irish Lotto Results & Winning Numbers",
-  description: "Get the latest Irish Lotto results, winning numbers, and jackpot information. Check if you've won in the most recent Irish National Lottery draw.",
+  title: "Irish Lotto Results Tonight 3 Draws - CHECK NOW",
+  description: "Latest Irish Lotto results for tonight's draw. Check winning numbers and prizes for all 3 draws - Main Draw, Lotto Plus 1, and Lotto Plus 2. Updated instantly after each draw.",
   type: "website"
 })
+
+// Add dynamic fetch options
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 async function getLotteryResults(): Promise<{
   latest: WithId<LotteryDraw>;
@@ -24,6 +28,9 @@ async function getLotteryResults(): Promise<{
   try {
     const client = await clientPromise;
     const db = client.db("lottery");
+    
+    // Add cache-busting timestamp to force fresh data
+    const currentTimestamp = new Date().getTime();
     
     // Get latest result
     const latestResult = await db

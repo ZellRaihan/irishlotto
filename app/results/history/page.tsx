@@ -17,10 +17,17 @@ export const metadata: Metadata = constructMetadata({
   type: "article",
 })
 
+// Add dynamic fetch options
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 async function getLotteryResults(): Promise<WithId<LotteryDraw>[]> {
   try {
     const client = await clientPromise;
     const db = client.db("lottery");
+    
+    // Add cache-busting timestamp
+    const currentTimestamp = new Date().getTime();
     
     const results = await db
       .collection<LotteryDraw>("lottoresults")
