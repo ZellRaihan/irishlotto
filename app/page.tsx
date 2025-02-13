@@ -10,6 +10,8 @@ import { differenceInDays, addDays, isSaturday, isWednesday, nextWednesday, next
 import { Timer, Calendar } from "lucide-react"
 import { Metadata } from "next"
 import { constructMetadata } from "./seo.config"
+import Image from 'next/image';
+import clsx from 'clsx';
 
 export const metadata: Metadata = constructMetadata({
   title: "Irish Lotto Results Tonight 3 Draws - CHECK NOW",
@@ -92,34 +94,68 @@ function ResultBox({
   bonus: number
   isHighlighted?: boolean
 }) {
+  const variantConfig = {
+    lotto: {
+      logo: "/lotto.svg",
+      alt: "Irish Lotto",
+      height: "h-8",
+    },
+    lottoPlus1: {
+      logo: "/plus1.svg",
+      alt: "Lotto Plus 1",
+      height: "h-8",
+    },
+    lottoPlus2: {
+      logo: "/plus2.svg",
+      alt: "Lotto Plus 2",
+      height: "h-8",
+    },
+  }
+
   return (
     <div
-      className={`bg-white rounded-lg border border-blue-100 overflow-hidden ${
-        isHighlighted ? "ring-1 ring-blue-200" : ""
-      }`}
+      className={clsx(
+        "bg-white rounded-xl shadow-sm p-4 sm:p-6",
+        isHighlighted && "ring-2 ring-blue-500"
+      )}
     >
-      <div className="px-3 sm:px-4 py-2 flex justify-between items-center border-b border-gray-100">
-        <LotteryLogo variant={variant} className="h-5 sm:h-6 w-16 sm:w-20" />
-        <div className="flex items-center gap-1 sm:gap-2">
-          <div className="text-xs text-gray-500">Jackpot</div>
-          <div className="text-sm sm:text-base font-semibold text-green-600">{formatCurrency(jackpotAmount)}</div>
+      {/* Header */}
+      <div className="space-y-4 mb-6">
+        <div className="flex items-start justify-between">
+          <Image
+            src={variantConfig[variant].logo}
+            alt={variantConfig[variant].alt}
+            width={100}
+            height={32}
+            className={variantConfig[variant].height}
+          />
+          <div className="text-right">
+            <div className="text-sm text-gray-500">Jackpot</div>
+            <div className="text-lg font-semibold text-green-600">
+              {formatCurrency(jackpotAmount)}
+            </div>
+          </div>
         </div>
       </div>
-      <div className="p-2 sm:p-3">
-        <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2">
-          {numbers.map((number, index) => (
+
+      {/* Numbers */}
+      <div className="space-y-6">
+        <div className="grid grid-cols-6 gap-2">
+          {numbers.map((number) => (
             <div
-              key={index}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-yellow-50 border border-yellow-100 flex items-center justify-center font-medium text-gray-700 text-sm sm:text-base"
+              key={number}
+              className="aspect-square rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center text-lg font-semibold text-blue-700"
             >
               {number}
             </div>
           ))}
-          <div className="flex items-center gap-1 sm:gap-2 ml-1">
-            <span className="text-xs sm:text-sm text-gray-500">Bonus</span>
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center font-medium text-gray-700 text-sm sm:text-base">
-              {bonus}
-            </div>
+        </div>
+
+        {/* Bonus */}
+        <div className="flex items-center justify-center gap-3">
+          <div className="text-sm font-medium text-gray-500">Bonus</div>
+          <div className="aspect-square w-8 rounded-full bg-gradient-to-br from-amber-50 to-yellow-50 flex items-center justify-center text-lg font-semibold text-amber-600">
+            {bonus}
           </div>
         </div>
       </div>
@@ -155,7 +191,7 @@ export default async function Home() {
               Results for {formatDate(currentData.drawDate)}
             </h2>
           </div>
-          <div className="inline-flex items-center bg-white rounded-lg shadow-sm p-1.5 border border-gray-100 mb-8">
+          <div className="inline-flex items-center bg-white rounded-lg shadow-sm p-1.5 border border-gray-100">
             <LotteryDatePicker selected={new Date(currentData.drawDate)} />
           </div>
         </div>
@@ -193,7 +229,7 @@ export default async function Home() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <div className="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <ResultBox
             variant="lotto"
             jackpotAmount={currentData.mainDraw.jackpotAmount}
