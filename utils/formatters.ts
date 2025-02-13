@@ -14,9 +14,9 @@ export function formatCurrency(amount: number): string {
 }
 
 export function formatDate(date: string | Date): string {
-  const dateObj = typeof date === "string" ? new Date(date) : date
+  const d = new Date(date)
   // Convert to Dublin time
-  const dublinDate = toZonedTime(dateObj, dublinTz)
+  const dublinDate = toZonedTime(d, dublinTz)
   return format(dublinDate, "EEEE, do MMMM yyyy", { locale: enIE })
 }
 
