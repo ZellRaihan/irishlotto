@@ -155,7 +155,7 @@ export default async function Home() {
               Results for {formatDate(currentData.drawDate)}
             </h2>
           </div>
-          <div className="inline-flex items-center bg-white rounded-lg shadow-sm p-1.5 border border-gray-100">
+          <div className="inline-flex items-center bg-white rounded-lg shadow-sm p-1.5 border border-gray-100 mb-8">
             <LotteryDatePicker selected={new Date(currentData.drawDate)} />
           </div>
         </div>
