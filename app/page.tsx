@@ -158,12 +158,19 @@ export default async function Home() {
       <div className="bg-gradient-to-r from-blue-50 to-green-50 p-3 sm:p-4 rounded-xl shadow-sm">
         <div className="text-center space-y-4">
           <div className="space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            {/* Preload the text content */}
+            <h1 
+              className="text-3xl sm:text-4xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+              style={{ contentVisibility: 'auto' }}
+            >
               Irish Lottery Results
             </h1>
-            <h2 className="text-lg sm:text-xl text-gray-600 flex items-center justify-center gap-2">
+            <h2 
+              className="text-lg sm:text-xl text-gray-600 flex items-center justify-center gap-2"
+              style={{ contentVisibility: 'auto' }}
+            >
               <Calendar className="w-5 h-5 text-blue-600" />
-              Results for {formatDublinDate(currentData.drawDate)}
+              <span>Results for {formatDublinDate(currentData.drawDate)}</span>
             </h2>
           </div>
           <div className="inline-flex items-center bg-white rounded-lg shadow-sm p-1.5 border border-gray-100">
