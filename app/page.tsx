@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { formatCurrency, formatDate, formatDublinDate } from "@/utils/formatters"
+import { formatCurrency, formatDublinDate } from "@/utils/formatters"
 import { LotteryLogo } from "@/components/lottery-logo"
 import LotteryDatePicker from "@/components/lottery-date-picker"
 import Link from "next/link"
@@ -163,7 +163,7 @@ export default async function Home() {
             </h1>
             <h2 className="text-lg sm:text-xl text-gray-600 flex items-center justify-center gap-2">
               <Calendar className="w-5 h-5 text-blue-600" />
-              Results for {formatDate(currentData.drawDate)}
+              Results for {formatDublinDate(currentData.drawDate)}
             </h2>
           </div>
           <div className="inline-flex items-center bg-white rounded-lg shadow-sm p-1.5 border border-gray-100">

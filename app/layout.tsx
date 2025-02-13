@@ -5,6 +5,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { constructMetadata } from './seo.config'
 import JsonLd from '@/components/json-ld'
+import { LoadingProvider } from "@/components/loading-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -43,11 +44,13 @@ export default function RootLayout({
           <JsonLd type="Website" />
           <JsonLd type="Organization" />
           <Header />
-          <main className="flex-1">
-            <div className="py-6">
-              {children}
-            </div>
-          </main>
+          <LoadingProvider>
+            <main className="flex-1">
+              <div className="py-6">
+                {children}
+              </div>
+            </main>
+          </LoadingProvider>
           <Footer />
         </div>
       </body>
