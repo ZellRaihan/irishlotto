@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { formatCurrency, formatDate } from "@/utils/formatters"
+import { formatCurrency, formatDublinDate } from "@/utils/formatters"
 import { LotteryLogo } from "@/components/lottery-logo"
 import LotteryDatePicker from "@/components/lottery-date-picker"
 import Link from "next/link"
@@ -94,24 +94,6 @@ function ResultBox({
   bonus: number
   isHighlighted?: boolean
 }) {
-  const variantConfig = {
-    lotto: {
-      logo: "/lotto.svg",
-      alt: "Irish Lotto",
-      height: "h-8",
-    },
-    lottoPlus1: {
-      logo: "/plus1.svg",
-      alt: "Lotto Plus 1",
-      height: "h-8",
-    },
-    lottoPlus2: {
-      logo: "/plus2.svg",
-      alt: "Lotto Plus 2",
-      height: "h-8",
-    },
-  }
-
   return (
     <div
       className={clsx(
@@ -122,13 +104,7 @@ function ResultBox({
       {/* Header */}
       <div className="space-y-4 mb-6">
         <div className="flex items-start justify-between">
-          <Image
-            src={variantConfig[variant].logo}
-            alt={variantConfig[variant].alt}
-            width={100}
-            height={32}
-            className={variantConfig[variant].height}
-          />
+          <LotteryLogo variant={variant} className="h-8" />
           <div className="text-right">
             <div className="text-sm text-gray-500">Jackpot</div>
             <div className="text-lg font-semibold text-green-600">
@@ -188,7 +164,7 @@ export default async function Home() {
             </h1>
             <h2 className="text-lg sm:text-xl text-gray-600 flex items-center justify-center gap-2">
               <Calendar className="w-5 h-5 text-blue-600" />
-              Results for {formatDate(currentData.drawDate)}
+              Results for {formatDublinDate(currentData.drawDate)}
             </h2>
           </div>
           <div className="inline-flex items-center bg-white rounded-lg shadow-sm p-1.5 border border-gray-100">
@@ -209,7 +185,7 @@ export default async function Home() {
                       Next Draw Coming Soon
                     </h3>
                     <p className="text-gray-600">
-                      The next Irish Lottery draw will be held on {formatDate(nextDrawDate!)}. Check back for the latest results!
+                      The next Irish Lottery draw will be held on {formatDublinDate(nextDrawDate!)}. Check back for the latest results!
                     </p>
                   </div>
                   <div>
@@ -281,7 +257,7 @@ export default async function Home() {
               {pastResults.map((result) => (
                 <tr key={result._id} className="border-b border-gray-100 hover:bg-blue-50 transition-colors duration-200">
                   <td className="p-2 sm:p-3 font-medium text-gray-800 text-xs sm:text-sm">
-                    {formatDate(result.drawDate)}
+                    {formatDublinDate(result.drawDate)}
                   </td>
                   <td className="p-2 sm:p-3">
                     <div className="flex flex-wrap gap-1 sm:gap-2">
