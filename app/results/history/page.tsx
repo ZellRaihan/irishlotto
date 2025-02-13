@@ -19,7 +19,8 @@ export const metadata: Metadata = constructMetadata({
 
 // Add dynamic fetch options
 export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Use ISR with 1-hour cache
+export const revalidate = 3600
 
 async function getLotteryResults(): Promise<WithId<LotteryDraw>[]> {
   try {

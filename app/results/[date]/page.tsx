@@ -15,7 +15,8 @@ import { isSaturday, isWednesday, nextWednesday, nextSaturday, format, addDays, 
 
 // Add dynamic fetch options
 export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Use ISR with 1-hour cache
+export const revalidate = 3600
 
 async function getLotteryResult(date: string): Promise<LotteryDraw | null> {
   try {

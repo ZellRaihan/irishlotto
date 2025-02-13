@@ -19,9 +19,8 @@ export const metadata: Metadata = constructMetadata({
   type: "website"
 })
 
-// Add dynamic fetch options
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Remove force-dynamic, use revalidate instead
+export const revalidate = 3600 // Cache for 1 hour
 
 async function getLotteryResults(): Promise<{
   latest: WithId<LotteryDraw>;
