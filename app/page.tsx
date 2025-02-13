@@ -29,10 +29,10 @@ async function getLotteryResults(): Promise<{
   try {
     const client = await clientPromise;
     const db = client.db("lottery");
-    
+
     // Add cache-busting timestamp to force fresh data
     const currentTimestamp = new Date().getTime();
-    
+
     // Get latest result
     const latestResult = await db
       .collection<LotteryDraw>("lottoresults")
@@ -63,7 +63,7 @@ async function getLotteryResults(): Promise<{
 
 function getNextDrawDate(lastDrawDate: Date): Date {
   // Always use the lastDrawDate as the base for calculating next draw
-  
+
   // If last draw was Wednesday, next draw is Saturday
   if (isWednesday(lastDrawDate)) {
     return nextSaturday(lastDrawDate)
@@ -101,12 +101,14 @@ function ResultBox({
       )}
     >
       {/* Header */}
-      <div className="p-4 sm:p-6 space-y-4 border-b border-gray-200">
+      <div className="px-4 py-3 border-b border-gray-100">
         <div className="flex items-start justify-between">
-          <LotteryLogo variant={variant} className="h-8" />
+          <div className="w-24">
+            <LotteryLogo variant={variant} className="h-8" />
+          </div>
           <div className="text-right">
-            <div className="text-sm text-gray-500">Jackpot</div>
-            <div className="text-lg font-semibold text-green-600">
+            <div className="text-xs text-gray-500">Jackpot</div>
+            <div className="text-base font-semibold text-green-600">
               {formatCurrency(jackpotAmount)}
             </div>
           </div>
@@ -114,12 +116,12 @@ function ResultBox({
       </div>
 
       {/* Numbers */}
-      <div className="p-4 sm:p-6 space-y-6">
+      <div className="p-4 space-y-4">
         <div className="grid grid-cols-6 gap-2">
           {numbers.map((number) => (
             <div
               key={number}
-              className="aspect-square rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center text-lg font-semibold text-blue-700"
+              className="aspect-square w-full rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center text-lg font-semibold text-blue-700"
             >
               {number}
             </div>
@@ -127,9 +129,9 @@ function ResultBox({
         </div>
 
         {/* Bonus */}
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-2">
           <div className="text-sm font-medium text-gray-500">Bonus</div>
-          <div className="aspect-square w-8 rounded-full bg-gradient-to-br from-amber-50 to-yellow-50 flex items-center justify-center text-lg font-semibold text-amber-600">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-50 to-yellow-50 flex items-center justify-center text-lg font-semibold text-amber-600">
             {bonus}
           </div>
         </div>
@@ -140,13 +142,13 @@ function ResultBox({
 
 export default async function Home() {
   const { latest: currentData, pastResults } = await getLotteryResults();
-  
+
   // Check if latest results are more than 2 days old
   const daysSinceLastDraw = differenceInDays(
     new Date(),
     new Date(currentData.drawDate)
   );
-  
+
   // Show coming soon if latest result is more than 2 days old
   const showComingSoon = daysSinceLastDraw >= 2;
   const nextDrawDate = showComingSoon ? getNextDrawDate(new Date(currentData.drawDate)) : null;
