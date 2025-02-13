@@ -97,12 +97,12 @@ function ResultBox({
   return (
     <div
       className={clsx(
-        "bg-white rounded-xl shadow-sm p-4 sm:p-6",
+        "bg-white rounded-xl shadow-sm overflow-hidden",
         isHighlighted && "ring-2 ring-blue-500"
       )}
     >
       {/* Header */}
-      <div className="space-y-4 mb-6">
+      <div className="p-4 sm:p-6 space-y-4 border-b border-gray-200">
         <div className="flex items-start justify-between">
           <LotteryLogo variant={variant} className="h-8" />
           <div className="text-right">
@@ -115,7 +115,7 @@ function ResultBox({
       </div>
 
       {/* Numbers */}
-      <div className="space-y-6">
+      <div className="p-4 sm:p-6 space-y-6">
         <div className="grid grid-cols-6 gap-2">
           {numbers.map((number) => (
             <div
