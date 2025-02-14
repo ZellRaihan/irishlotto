@@ -24,7 +24,7 @@ const Footer = () => {
             <p className="text-gray-600 leading-relaxed">
               Your trusted source for Irish Lottery results. Get instant access to the latest draws, numbers, and jackpot information.
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4" style={{ contentVisibility: 'auto' }}>
               <a
                 href={siteConfig.social.facebook}
                 target="_blank"
@@ -70,15 +70,6 @@ const Footer = () => {
               >
                 <Linkedin className="h-5 w-5" />
               </a>
-              <a
-                href={siteConfig.social.pinterest}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-red-700 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300"
-                aria-label="Follow us on Pinterest"
-              >
-                <PinIcon className="h-5 w-5" />
-              </a>
             </div>
           </div>
 
@@ -87,69 +78,54 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
               Quick Links
             </h3>
-            <ul className="space-y-3">
-              <li>
-                <Link 
-                  href="/" 
-                  className="text-gray-600 hover:text-green-600 hover:translate-x-1 transition-all duration-300 flex items-center space-x-2"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                  <span>Latest Results</span>
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/results/history" 
-                  className="text-gray-600 hover:text-green-600 hover:translate-x-1 transition-all duration-300 flex items-center space-x-2"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                  <span>Results History</span>
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/faq" 
-                  className="text-gray-600 hover:text-green-600 hover:translate-x-1 transition-all duration-300 flex items-center space-x-2"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                  <span>FAQ</span>
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/contact" 
-                  className="text-gray-600 hover:text-green-600 hover:translate-x-1 transition-all duration-300 flex items-center space-x-2"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                  <span>Contact Us</span>
-                </Link>
-              </li>
-            </ul>
+            <nav className="space-y-4">
+              <Link 
+                href="/results/history" 
+                className="block text-gray-600 hover:text-green-600 transition-colors"
+              >
+                Results History
+              </Link>
+              <Link 
+                href="/statistics" 
+                className="block text-gray-600 hover:text-green-600 transition-colors"
+              >
+                Statistics
+              </Link>
+              <Link 
+                href="/how-to-play" 
+                className="block text-gray-600 hover:text-green-600 transition-colors"
+              >
+                How to Play
+              </Link>
+              <Link 
+                href="/contact" 
+                className="block text-gray-600 hover:text-green-600 transition-colors"
+              >
+                Contact Us
+              </Link>
+            </nav>
           </div>
 
           {/* Contact Info */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
-              Contact Us
+              Contact & Support
             </h3>
             <div className="space-y-4">
-              <a
-                href="mailto:contact@irishlottoresults.co.uk"
-                className="flex items-center space-x-3 text-gray-600 hover:text-green-600 transition-colors group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center group-hover:bg-green-100 transition-colors">
+              <div className="flex items-center space-x-3 text-gray-600">
+                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
                   <Mail className="h-4 w-4" />
                 </div>
-                <span>contact@irishlottoresults.co.uk</span>
-              </a>
+                <span>support@irishlottoresults.co.uk</span>
+              </div>
               <div className="flex items-center space-x-3 text-gray-600">
-                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
                   <MapPin className="h-4 w-4" />
                 </div>
                 <span>United Kingdom</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-600">
-                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
                   <Clock className="h-4 w-4" />
                 </div>
                 <span>Results updated daily</span>
@@ -162,15 +138,15 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
               Stay Updated
             </h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600" style={{ contentVisibility: 'auto' }}>
               Follow us on social media for the latest lottery results, news, and updates.
             </p>
-            <div className="bg-white rounded-xl p-4 shadow-md">
+            <div className="bg-white rounded-xl p-4 shadow-md" style={{ contentVisibility: 'auto' }}>
               <p className="text-sm text-gray-500 mb-2">
                 <span className="font-semibold text-green-600">Tip:</span> Enable notifications to get instant results!
               </p>
               <div className="flex items-center text-sm text-gray-600">
-                <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                <span className="w-2 h-2 rounded-full bg-green-500 mr-2 flex-shrink-0"></span>
                 <span>Results posted within minutes</span>
               </div>
             </div>
