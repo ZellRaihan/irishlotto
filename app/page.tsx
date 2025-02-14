@@ -117,11 +117,12 @@ function ResultBox({
 
       {/* Numbers */}
       <div className="p-4 space-y-4">
+        {/* Main Numbers */}
         <div className="grid grid-cols-6 gap-2">
           {numbers.map((number) => (
             <div
               key={number}
-              className="aspect-square w-full rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center text-lg font-semibold text-blue-700"
+              className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center text-base font-semibold text-blue-700"
             >
               {number}
             </div>
@@ -131,7 +132,7 @@ function ResultBox({
         {/* Bonus */}
         <div className="flex items-center justify-center gap-2">
           <div className="text-sm font-medium text-gray-500">Bonus</div>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-50 to-yellow-50 flex items-center justify-center text-lg font-semibold text-amber-600">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-50 to-yellow-50 flex items-center justify-center text-base font-semibold text-amber-600">
             {bonus}
           </div>
         </div>

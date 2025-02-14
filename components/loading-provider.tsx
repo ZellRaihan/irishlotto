@@ -15,15 +15,9 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  // Show loading on route change
   useEffect(() => {
-    setIsLoading(true)
-    // Hide loading after a minimum delay
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 500) // Minimum loading time of 500ms
-
-    return () => clearTimeout(timer)
+    // Reset loading state when route changes
+    setIsLoading(false)
   }, [pathname, searchParams])
 
   return (

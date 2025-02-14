@@ -1,6 +1,6 @@
 'use client';
 
-import { format, isWednesday, isSaturday, isBefore, startOfDay, parseISO } from "date-fns"
+import { format, isWednesday, isSaturday, isBefore, startOfDay } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/popover"
 import { useRouter } from "next/navigation"
 import { enIE } from "date-fns/locale"
+import { useLoading } from "./loading-provider"
+import { useState } from "react"
 
 export interface LotteryDatePickerProps {
   selected: Date;
@@ -20,6 +22,8 @@ export interface LotteryDatePickerProps {
 
 export default function LotteryDatePicker({ selected, className }: LotteryDatePickerProps) {
   const router = useRouter();
+  const { setIsLoading } = useLoading();
+  const [isOpen, setIsOpen] = useState(false);
 
   // Function to check if a date is a lottery day (Wednesday or Saturday)
   const isLotteryDay = (date: Date) => {
@@ -34,14 +38,29 @@ export default function LotteryDatePicker({ selected, className }: LotteryDatePi
   }
 
   const handleDateSelect = (date: Date | undefined) => {
-    if (date) {
-      const formattedDate = format(date, "yyyy-MM-dd")
-      router.push(`/results/${formattedDate}`);
+    // If no date is selected or it's the same date, just close the popover
+    if (!date || date.getTime() === selected.getTime()) {
+      setIsOpen(false);
+      return;
+    }
+    
+    // Only navigate if a different date is selected
+    setIsOpen(false);
+    setIsLoading(true);
+    const formattedDate = format(date, "yyyy-MM-dd");
+    router.push(`/results/${formattedDate}`);
+  }
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      // When closing without selecting a date, ensure loading is off
+      setIsLoading(false);
     }
   }
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button 
           variant="outline" 
@@ -55,7 +74,7 @@ export default function LotteryDatePicker({ selected, className }: LotteryDatePi
           {format(selected, "EEEE, do MMMM yyyy", { locale: enIE })}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
           selected={selected}
