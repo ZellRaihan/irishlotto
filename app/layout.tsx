@@ -29,7 +29,6 @@ export const metadata: Metadata = {
   },
   manifest: '/site.webmanifest',
   themeColor: '#ffffff',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=5',
   formatDetection: {
     telephone: false
   }
@@ -45,7 +44,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta httpEquiv="Pragma" content="no-cache" />
         <meta httpEquiv="Expires" content="0" />
