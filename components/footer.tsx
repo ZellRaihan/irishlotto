@@ -204,7 +204,14 @@ const Footer = () => {
 
             {/* Copyright */}
             <p className="text-gray-600 text-sm">
-              &copy; {new Date().getFullYear()} IrishLottoResults.co.uk - All rights reserved.
+              &copy; {new Date().getFullYear()}{" "}
+              <a 
+                href="https://www.irishlottoresults.co.uk" 
+                className="text-green-600 hover:underline"
+              >
+                IrishLottoResults.co.uk
+              </a>
+              {" "}- All rights reserved.
             </p>
 
             {/* Disclaimer */}
