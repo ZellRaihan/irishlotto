@@ -81,8 +81,10 @@ export function constructMetadata({
     },
     verification: {
       google: siteConfig.verification.google,
-      bing: siteConfig.verification.bing,
-      yandex: siteConfig.verification.yandex,
+      other: {
+        'msvalidate.01': siteConfig.verification.bing,
+        'yandex-verification': siteConfig.verification.yandex,
+      },
     },
     openGraph: {
       title: title,
