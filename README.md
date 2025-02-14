@@ -41,6 +41,8 @@ npm install
 Create a `.env.local` file with the following:
 ```
 MONGODB_URI=your_mongodb_connection_string
+REVALIDATE_TOKEN=your_secure_token_for_cache_clearing
+CACHE_TTL=3600  # Cache time-to-live in seconds (default: 1 hour)
 ```
 
 4. Run the development server:
@@ -57,6 +59,44 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 - `/lib` - Database and utility functions
 - `/public` - Static assets
 - `/utils` - Helper functions and formatters
+
+## Cache Management
+
+The application uses Next.js's caching system to optimize performance. By default, lottery results are cached for 1 hour (configurable via `CACHE_TTL` environment variable).
+
+### Cache Tags
+
+- `results` - All lottery results
+- `latest-results` - Latest draw results
+- `history-results` - Historical results
+- `result-[date]` - Specific date results
+
+### Clear Cache Endpoint
+
+The application provides an API endpoint to clear the cache:
+
+```
+GET /api/clear-cache?token=[REVALIDATE_TOKEN]&tags=results,latest-results
+```
+
+#### Parameters:
+
+- `token` (required): Security token matching `REVALIDATE_TOKEN` environment variable
+- `tags` (optional): Comma-separated list of cache tags to clear. If not provided, all result-related caches will be cleared.
+
+#### Example Response:
+
+```json
+{
+  "revalidated": true,
+  "message": "Cache cleared for tags: results, latest-results"
+}
+```
+
+#### Error Responses:
+
+- `401 Unauthorized`: Invalid token
+- `500 Internal Server Error`: Cache clearing failed
 
 ## Contributing
 
