@@ -22,10 +22,10 @@ async function getLotteryResult(date: string): Promise<LotteryDraw | null> {
   try {
     const client = await clientPromise;
     const db = client.db("lottery");
-    
+
     // Add cache-busting timestamp
     const currentTimestamp = new Date().getTime()
-    
+
     const result = await db
       .collection<LotteryDraw>("lottoresults")
       .findOne({ _id: date });
@@ -92,12 +92,14 @@ function ResultBox({
   )
 }
 
-function PrizeBreakdown({ prizes }: { prizes: Array<{
-  match: string;
-  prizeType: string;
-  numberOfWinners: number;
-  prize: number;
-}> }) {
+function PrizeBreakdown({ prizes }: {
+  prizes: Array<{
+    match: string;
+    prizeType: string;
+    numberOfWinners: number;
+    prize: number;
+  }>
+}) {
   return (
     <div className="mt-4 overflow-x-auto -mx-4 sm:mx-0">
       <table className="w-full text-sm">
@@ -130,7 +132,7 @@ async function getLatestResult(): Promise<LotteryDraw | null> {
   try {
     const client = await clientPromise
     const db = client.db("lottery")
-    
+
     const latestResult = await db
       .collection<LotteryDraw>("lottoresults")
       .find({})
@@ -159,23 +161,23 @@ function getNextDrawDate(date: Date): Date {
 
 function shouldShowComingSoon(requestedDate: Date, latestResult: LotteryDraw | null): boolean {
   if (!latestResult) return false
-  
+
   // If requested date is in the future, show coming soon
   if (requestedDate > new Date()) return true
-  
+
   // If latest result is more than 2 days old and requested date is after latest result
   const daysSinceLastDraw = differenceInDays(new Date(), new Date(latestResult.drawDate))
   if (daysSinceLastDraw >= 2 && requestedDate > new Date(latestResult.drawDate)) {
     return true
   }
-  
+
   return false
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const currentDate = new Date(params.date)
   const nextDraw = getNextDrawDate(currentDate)
-  
+
   return constructMetadata({
     title: `Irish Lotto Results - ${format(currentDate, "EEEE, MMMM d, yyyy")}`,
     description: `View Irish Lotto results for ${format(currentDate, "MMMM d, yyyy")}. Check winning numbers and prizes.`,
@@ -185,21 +187,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LotteryResults({ params }: Props) {
   const currentDate = new Date(params.date)
-  
+
   // If date is invalid, show not found
   if (isNaN(currentDate.getTime())) {
     notFound()
   }
-  
+
   // Check if result exists for this date
   const resultExists = await checkResultExists(params.date)
   if (!resultExists) {
     const latestResult = await getLatestResult()
-    
+
     // If we should show coming soon page
     if (shouldShowComingSoon(currentDate, latestResult)) {
       const nextDraw = getNextDrawDate(currentDate)
-      
+
       return (
         <div className="max-w-4xl mx-auto p-4 py-8 space-y-8">
           <div className="space-y-6">
@@ -210,7 +212,7 @@ export default async function LotteryResults({ params }: Props) {
                 { label: format(currentDate, "MMMM d, yyyy") }
               ]}
             />
-            
+
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="space-y-2 text-center sm:text-left">
                 <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
@@ -228,7 +230,7 @@ export default async function LotteryResults({ params }: Props) {
               <div className="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center">
                 <Calendar className="w-8 h-8 text-blue-600" />
               </div>
-              
+
               <div className="space-y-2">
                 <h2 className="text-2xl font-semibold text-gray-900">Results Coming Soon</h2>
                 <p className="text-gray-600">
@@ -256,13 +258,13 @@ export default async function LotteryResults({ params }: Props) {
         </div>
       )
     }
-    
+
     // If not showing coming soon, show not found
     notFound()
   }
-  
+
   const result = await getLotteryResult(params.date);
-  
+
   if (!result) {
     notFound();
   }
@@ -277,7 +279,7 @@ export default async function LotteryResults({ params }: Props) {
             { label: formatDate(result.drawDate) }
           ]}
         />
-        
+
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-2 text-center sm:text-left">
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">

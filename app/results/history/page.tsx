@@ -26,10 +26,10 @@ async function getLotteryResults(): Promise<WithId<LotteryDraw>[]> {
   try {
     const client = await clientPromise;
     const db = client.db("lottery");
-    
+
     // Add cache-busting timestamp
     const currentTimestamp = new Date().getTime();
-    
+
     const results = await db
       .collection<LotteryDraw>("lottoresults")
       .find({})
@@ -65,13 +65,13 @@ export default async function HistoryPage() {
         image: "/og-history.jpg",
         date: new Date().toISOString()
       }} />
-      
+
       <div className="max-w-5xl mx-auto p-4 py-8 space-y-12">
         {/* Hero Section */}
         <div className="relative">
           {/* Background Pattern */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-blue-100/50 rounded-3xl" />
-          
+
           <div className="relative px-6 py-12 sm:px-12 sm:py-16 rounded-3xl border border-blue-100">
             <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
               {/* Title and Description */}
@@ -120,7 +120,7 @@ export default async function HistoryPage() {
               href={`/results/${result._id}`}
               className="block group"
             >
-              <div 
+              <div
                 className="bg-gradient-to-br from-white to-gray-50 p-5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -132,7 +132,7 @@ export default async function HistoryPage() {
                         {formatDate(result.drawDate)}
                       </h3>
                     </div>
-                    
+
                     <div className="space-y-3">
                       <div className="space-y-2">
                         <div className="text-sm font-medium text-gray-600">Winning Numbers</div>
