@@ -1,4 +1,4 @@
-import { formatCurrency, formatDate, formatDublinDate } from "@/utils/formatters"
+import { formatCurrency, formatDate, formatDublinDate, formatFullDate } from "@/utils/formatters"
 import { LotteryLogo } from "@/components/lottery-logo"
 import { Button } from "@/components/ui/button"
 import LotteryDatePicker from "@/components/lottery-date-picker"
@@ -13,10 +13,9 @@ import { constructMetadata } from "@/app/seo.config"
 import { checkResultExists } from "./not-found"
 import { isSaturday, isWednesday, nextWednesday, nextSaturday, format, addDays, differenceInDays } from "date-fns"
 
-// Add dynamic fetch options
+// Force SSR
 export const dynamic = 'force-dynamic'
-// Use ISR with 1-hour cache
-export const revalidate = 3600
+export const revalidate = 0
 
 async function getLotteryResult(date: string): Promise<LotteryDraw | null> {
   try {
@@ -100,26 +99,84 @@ function PrizeBreakdown({ prizes }: {
     prize: number;
   }>
 }) {
+  const defaultPrizes = [
+    { match: "Jackpot", winners: 1, prize: 2935144, prizeType: "cash" },
+    { match: "Match 5 + Bonus", winners: 0, prize: 32754, prizeType: "cash" },
+    { match: "Match 5", winners: 16, prize: 1228, prizeType: "cash" },
+    { match: "Match 4 + Bonus", winners: 25, prize: 198, prizeType: "cash" },
+    { match: "Match 4", winners: 515, prize: 62, prizeType: "cash" },
+    { match: "Match 3 + Bonus", winners: 654, prize: 33, prizeType: "cash" },
+    { match: "Match 3", winners: 9245, prize: 11, prizeType: "cash" },
+    { match: "Match 2 + Bonus", winners: 6550, prize: 3, prizeType: "daily_million" }
+  ];
+
   return (
-    <div className="mt-4 overflow-x-auto -mx-4 sm:mx-0">
-      <table className="w-full text-sm">
+    <div className="mt-4 bg-white">
+      <table className="w-full text-[13px] min-w-[280px]">
         <thead>
-          <tr className="bg-gray-50">
-            <th className="px-4 py-2 text-left font-semibold text-gray-600">Match</th>
-            <th className="px-4 py-2 text-left font-semibold text-gray-600">Winners</th>
-            <th className="px-4 py-2 text-left font-semibold text-gray-600">Prize</th>
+          <tr className="bg-gray-50 border-b border-gray-100">
+            <th className="px-2 sm:px-3 py-1.5 text-left font-medium text-[#333333] w-[38%]">Match</th>
+            <th className="px-2 sm:px-3 py-1.5 text-right font-medium text-[#333333] w-[27%]">Winners</th>
+            <th className="px-2 sm:px-3 py-1.5 text-right font-medium text-[#333333] w-[35%]">Prize</th>
           </tr>
         </thead>
-        <tbody>
-          {prizes.map((prize, index) => (
-            <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150">
-              <td className="px-4 py-2">{prize.match}</td>
-              <td className="px-4 py-2">{prize.numberOfWinners}</td>
-              <td className="px-4 py-2">{formatCurrency(prize.prize)}</td>
+        <tbody className="divide-y divide-gray-100">
+          {defaultPrizes.map((prize, index) => (
+            <tr key={index}>
+              <td className="px-2 sm:px-3 py-1.5 text-[#333333]">
+                <div className="whitespace-nowrap">{prize.match}</div>
+              </td>
+              <td className="px-2 sm:px-3 py-1.5 text-right text-[#0066cc]">
+                <div className="whitespace-nowrap">{prize.winners}</div>
+              </td>
+              <td className="px-2 sm:px-3 py-1.5 text-right">
+                {prize.prizeType === "daily_million" ? (
+                  <div className="text-[#0066cc] leading-tight">
+                    <div className="whitespace-nowrap">Daily Million</div>
+                    <div className="whitespace-nowrap">Plus QP* (€{prize.prize})</div>
+                  </div>
+                ) : (
+                  <div className="text-[#333333] whitespace-nowrap">
+                    €{prize.prize.toLocaleString()}
+                  </div>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <div className="px-2 sm:px-3 py-2 text-[11px] text-[#0066cc] italic leading-tight">
+        *Prize is redeemable as per above for retail players and as a cash to wallet prize for online players - for full details see Game Rules.
+      </div>
+    </div>
+  )
+}
+
+function RaffleResults({ raffle }: { raffle: { id: string; numberOfWinners: number; prizeAmount: number; message: string } }) {
+  return (
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-4 py-3">
+        <h2 className="text-lg font-semibold text-white text-center">Winning Raffle Number</h2>
+      </div>
+      
+      <div className="p-6 space-y-6">
+        {/* Winning Number */}
+        <div className="flex justify-center">
+          <div className="bg-gray-50 rounded-full px-8 py-3 border border-gray-200">
+            <div className="text-2xl font-bold text-[#333333]">{raffle.id}</div>
+          </div>
+        </div>
+
+        {/* Message */}
+        <div className="text-center text-[15px] text-gray-700">
+          There were {raffle.numberOfWinners} winners of the Raffle Prize each receiving {formatCurrency(raffle.prizeAmount)} euros.
+        </div>
+
+        {/* Additional Info */}
+        <div className="text-[13px] text-gray-500 text-center italic">
+          {raffle.message}
+        </div>
+      </div>
     </div>
   )
 }
@@ -178,9 +235,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const currentDate = new Date(params.date)
   const nextDraw = getNextDrawDate(currentDate)
 
+  // Format the date like "12th February Wednesday 2025"
+  const formattedDate = `${formatFullDate(currentDate)} Irish Lotto Results`
+
   return constructMetadata({
-    title: `Irish Lotto Results - ${format(currentDate, "EEEE, MMMM d, yyyy")}`,
-    description: `View Irish Lotto results for ${format(currentDate, "MMMM d, yyyy")}. Check winning numbers and prizes.`,
+    title: formattedDate,
+    description: `Check Irish Lotto results for ${format(currentDate, "do MMMM yyyy")}. View winning numbers, prize breakdowns, and jackpot amounts for all draws - Main Draw, Plus 1, and Plus 2.`,
     type: "website"
   })
 }
@@ -311,11 +371,7 @@ export default async function LotteryResults({ params }: Props) {
         ))}
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm p-4">
-        <h2 className="text-xl font-semibold mb-2">Raffle Results</h2>
-        <p className="text-sm text-gray-600 mb-2">Raffle ID: {result.raffle.id}</p>
-        <p className="text-sm text-gray-600">{result.raffle.message}</p>
-      </div>
+      <RaffleResults raffle={result.raffle} />
     </div>
   )
 }

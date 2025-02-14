@@ -45,85 +45,101 @@ export default function LotteryResults() {
   return (
     <div className="space-y-8">
       {results.map((draw) => (
-        <div key={draw._id} className="bg-white rounded-lg p-6 shadow-sm">
-          <h2 className="text-2xl font-bold mb-4">
-            Draw Date: {format(new Date(draw.drawDate), 'PPP')}
-          </h2>
-          
+        <div key={draw._id} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in" role="region" aria-label="Latest lottery results">
           {/* Main Draw */}
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold">{draw.mainDraw.gameType}</h3>
-              <div className="text-green-600 font-semibold">
-                Jackpot: {formatCurrency(draw.mainDraw.jackpotAmount)}
+          <div className="bg-white rounded-xl shadow-lg p-6 transform hover:scale-[1.02] transition-all duration-300" role="article" aria-labelledby="main-draw-heading">
+            <h2 id="main-draw-heading" className="text-2xl font-bold text-gray-800 mb-4">Main Draw</h2>
+            <div className="space-y-4">
+              <div className="flex flex-wrap gap-2" role="list" aria-label="Winning numbers">
+                {draw.mainDraw.winningNumbers.standard.map((number, index) => (
+                  <div
+                    key={index}
+                    className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-green-600 text-white flex items-center justify-center font-bold text-lg shadow-md hover:shadow-lg transition-shadow"
+                    role="listitem"
+                  >
+                    {number}
+                  </div>
+                ))}
+                {draw.mainDraw.winningNumbers.bonus && (
+                  <div
+                    className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-md hover:shadow-lg transition-shadow"
+                    role="listitem"
+                    aria-label="Bonus number"
+                  >
+                    {draw.mainDraw.winningNumbers.bonus}
+                  </div>
+                )}
+              </div>
+              <div className="mt-4">
+                <div className="text-gray-600">Jackpot Amount:</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {formatCurrency(draw.mainDraw.jackpotAmount)}
+                </div>
               </div>
             </div>
-            
-            <div className="flex gap-2 mb-4">
-              {draw.mainDraw.winningNumbers.standard.map((num: number, i: number) => (
-                <span 
-                  key={i} 
-                  className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full font-bold text-lg"
-                >
-                  {num}
-                </span>
-              ))}
-              <div className="flex items-center">
-                <span className="mx-2 text-gray-500">Bonus</span>
-                <span className="w-10 h-10 flex items-center justify-center bg-yellow-500 text-white rounded-full font-bold text-lg">
-                  {draw.mainDraw.winningNumbers.bonus}
-                </span>
-              </div>
-            </div>
-
-            <p className="text-gray-600 text-sm">{draw.mainDraw.prizeMessage}</p>
           </div>
 
           {/* Plus Draws */}
-          <div className="space-y-6">
-            {(['plusOne', 'plusTwo'] as const).map((drawType) => {
-              const plusDraw = drawType === 'plusOne' ? draw.plusOne : draw.plusTwo;
-              return (
-                <div key={drawType} className="border-t pt-6">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-semibold">{plusDraw.gameType}</h3>
-                    <div className="text-green-600 font-semibold">
-                      Jackpot: {formatCurrency(plusDraw.jackpotAmount)}
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2 mb-4">
-                    {plusDraw.winningNumbers.standard.map((num: number, i: number) => (
-                      <span 
-                        key={i} 
-                        className="w-8 h-8 flex items-center justify-center bg-blue-400 text-white rounded-full font-bold"
+          {(['plusOne', 'plusTwo'] as const).map((drawType) => {
+            const plusDraw = drawType === 'plusOne' ? draw.plusOne : draw.plusTwo;
+            return (
+              <div key={drawType} className="bg-white rounded-xl shadow-lg p-6 transform hover:scale-[1.02] transition-all duration-300" role="article" aria-labelledby={`${drawType}-heading`}>
+                <h2 id={`${drawType}-heading`} className="text-2xl font-bold text-gray-800 mb-4">{drawType.charAt(0).toUpperCase() + drawType.slice(1)}</h2>
+                <div className="space-y-4">
+                  <div className="flex flex-wrap gap-2" role="list" aria-label={`${drawType} winning numbers`}>
+                    {plusDraw.winningNumbers.standard.map((number, index) => (
+                      <div
+                        key={index}
+                        className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 text-white flex items-center justify-center font-bold text-lg shadow-md hover:shadow-lg transition-shadow"
+                        role="listitem"
                       >
-                        {num}
-                      </span>
+                        {number}
+                      </div>
                     ))}
-                    <div className="flex items-center">
-                      <span className="mx-2 text-gray-500 text-sm">Bonus</span>
-                      <span className="w-8 h-8 flex items-center justify-center bg-yellow-400 text-white rounded-full font-bold">
+                    {plusDraw.winningNumbers.bonus && (
+                      <div
+                        className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-pink-600 text-white flex items-center justify-center font-bold text-lg shadow-md hover:shadow-lg transition-shadow"
+                        role="listitem"
+                        aria-label={`${drawType} bonus number`}
+                      >
                         {plusDraw.winningNumbers.bonus}
-                      </span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-4">
+                    <div className="text-gray-600">Jackpot Amount:</div>
+                    <div className="text-2xl font-bold text-purple-600">
+                      {formatCurrency(plusDraw.jackpotAmount)}
                     </div>
                   </div>
-
-                  <p className="text-gray-600 text-sm">{plusDraw.prizeMessage}</p>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
+        </div>
 
-          {/* Raffle */}
-          <div className="border-t mt-6 pt-6">
-            <h3 className="text-lg font-semibold mb-2">Raffle Results</h3>
-            <p className="text-gray-600 text-sm">
-              Raffle ID: {draw.raffle.id} - {draw.raffle.message}
-            </p>
+        {/* Raffle */}
+        <div className="mt-8 bg-white rounded-xl shadow-lg p-6 animate-fade-in-up" role="region" aria-labelledby="raffle-heading">
+          <h2 id="raffle-heading" className="text-2xl font-bold text-gray-800 mb-4">Raffle Results</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse" role="table">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="p-4 border-b border-gray-200 font-semibold text-gray-600">Raffle ID</th>
+                  <th className="p-4 border-b border-gray-200 font-semibold text-gray-600">Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="hover:bg-gray-50 transition-colors">
+                  <td className="p-4 border-b border-gray-200">{draw.raffle.id}</td>
+                  <td className="p-4 border-b border-gray-200">{draw.raffle.message}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      ))}
-    </div>
+      </div>
+    ))}
+  </div>
   );
 }

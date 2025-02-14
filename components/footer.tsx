@@ -1,129 +1,235 @@
-'use client';
+import Link from "next/link"
+import { Facebook, Instagram, Linkedin, Twitter, Youtube, Mail, PinIcon, MapPin, Phone, Clock } from "lucide-react"
+import { siteConfig } from "@/app/seo.config"
 
-import Link from 'next/link';
-import { Github, Mail, Globe } from 'lucide-react';
-
-export default function Footer() {
-  const currentYear = new Date().getFullYear();
-
+const Footer = () => {
   return (
-    <footer className="w-full border-t bg-gradient-to-b from-background to-green-50/20">
-      <div className="container p-12">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-          {/* About Section */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2 mb-6">
-              <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
+    <footer className="relative bg-gradient-to-b from-white to-gray-50">
+      {/* Top Wave Pattern */}
+      <div className="absolute top-0 left-0 right-0 h-8 bg-[url('/wave.svg')] bg-repeat-x opacity-10"></div>
+
+      <div className="container mx-auto px-4 pt-16 pb-8">
+        {/* Main Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+          {/* Brand Section */}
+          <div className="space-y-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-2xl">L</span>
               </div>
-              <h3 className="text-xl font-bold">Irish Lotto Results</h3>
+              <h3 className="text-xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
+                Irish Lotto Results
+              </h3>
             </div>
-            <p className="text-muted-foreground leading-relaxed">
-              Your trusted source for Irish Lotto results. Check numbers, track draws, and stay updated with the latest lottery information.
+            <p className="text-gray-600 leading-relaxed">
+              Your trusted source for Irish Lottery results. Get instant access to the latest draws, numbers, and jackpot information.
             </p>
-            <div className="flex space-x-4 pt-4">
-              <Link 
-                href="https://github.com/ZellRaihan" 
+            <div className="flex flex-wrap gap-4">
+              <a
+                href={siteConfig.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-green-600 transition-colors"
+                className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-blue-600 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300"
+                aria-label="Follow us on Facebook"
               >
-                <Github className="w-5 h-5" />
-              </Link>
-              <Link 
-                href="mailto:contact@irishlotto.com"
-                className="text-muted-foreground hover:text-green-600 transition-colors"
-              >
-                <Mail className="w-5 h-5" />
-              </Link>
-              <Link 
-                href="https://www.lottery.ie"
+                <Facebook className="h-5 w-5" />
+              </a>
+              <a
+                href={siteConfig.social.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-green-600 transition-colors"
+                className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-blue-400 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300"
+                aria-label="Follow us on Twitter"
               >
-                <Globe className="w-5 h-5" />
-              </Link>
+                <Twitter className="h-5 w-5" />
+              </a>
+              <a
+                href={siteConfig.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-pink-600 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300"
+                aria-label="Follow us on Instagram"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a
+                href={siteConfig.social.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-red-600 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300"
+                aria-label="Subscribe to our YouTube channel"
+              >
+                <Youtube className="h-5 w-5" />
+              </a>
+              <a
+                href={siteConfig.social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-blue-800 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300"
+                aria-label="Connect with us on LinkedIn"
+              >
+                <Linkedin className="h-5 w-5" />
+              </a>
+              <a
+                href={siteConfig.social.pinterest}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-600 hover:text-red-700 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300"
+                aria-label="Follow us on Pinterest"
+              >
+                <PinIcon className="h-5 w-5" />
+              </a>
             </div>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold border-b pb-2">Quick Links</h3>
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
+              Quick Links
+            </h3>
             <ul className="space-y-3">
               <li>
                 <Link 
                   href="/" 
-                  className="text-muted-foreground hover:text-green-600 transition-colors flex items-center space-x-2"
+                  className="text-gray-600 hover:text-green-600 hover:translate-x-1 transition-all duration-300 flex items-center space-x-2"
                 >
-                  <span>→</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                   <span>Latest Results</span>
                 </Link>
               </li>
               <li>
                 <Link 
                   href="/results/history" 
-                  className="text-muted-foreground hover:text-green-600 transition-colors flex items-center space-x-2"
+                  className="text-gray-600 hover:text-green-600 hover:translate-x-1 transition-all duration-300 flex items-center space-x-2"
                 >
-                  <span>→</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
                   <span>Results History</span>
                 </Link>
               </li>
               <li>
                 <Link 
-                  href="https://www.lottery.ie/useful-info/responsible-play"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-green-600 transition-colors flex items-center space-x-2"
+                  href="/faq" 
+                  className="text-gray-600 hover:text-green-600 hover:translate-x-1 transition-all duration-300 flex items-center space-x-2"
                 >
-                  <span>→</span>
-                  <span>Responsible Gaming</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                  <span>FAQ</span>
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/contact" 
+                  className="text-gray-600 hover:text-green-600 hover:translate-x-1 transition-all duration-300 flex items-center space-x-2"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                  <span>Contact Us</span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact & Legal */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold border-b pb-2">Legal</h3>
+          {/* Contact Info */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
+              Contact Us
+            </h3>
             <div className="space-y-4">
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                This website is not affiliated with or endorsed by the Irish National Lottery. 
-                All lottery results and other information are provided for informational purposes only.
+              <a
+                href="mailto:contact@irishlottoresults.co.uk"
+                className="flex items-center space-x-3 text-gray-600 hover:text-green-600 transition-colors group"
+              >
+                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center group-hover:bg-green-100 transition-colors">
+                  <Mail className="h-4 w-4" />
+                </div>
+                <span>contact@irishlottoresults.co.uk</span>
+              </a>
+              <div className="flex items-center space-x-3 text-gray-600">
+                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                  <MapPin className="h-4 w-4" />
+                </div>
+                <span>United Kingdom</span>
+              </div>
+              <div className="flex items-center space-x-3 text-gray-600">
+                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                  <Clock className="h-4 w-4" />
+                </div>
+                <span>Results updated daily</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Newsletter */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
+              Stay Updated
+            </h3>
+            <p className="text-gray-600">
+              Follow us on social media for the latest lottery results, news, and updates.
+            </p>
+            <div className="bg-white rounded-xl p-4 shadow-md">
+              <p className="text-sm text-gray-500 mb-2">
+                <span className="font-semibold text-green-600">Tip:</span> Enable notifications to get instant results!
               </p>
-              <div className="p-4 bg-green-50 rounded-lg border border-green-100">
-                <p className="text-sm text-green-800">
-                  Please gamble responsibly. If you feel you may have a gambling problem, 
-                  seek help at <Link href="https://www.gamcare.org.uk" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:underline">GamCare</Link>.
-                </p>
+              <div className="flex items-center text-sm text-gray-600">
+                <span className="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                <span>Results posted within minutes</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-sm text-muted-foreground">
-              &copy; {currentYear} Irish Lotto Results. All rights reserved.
-            </p>
-            <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-              <span>
-                Made with &hearts; by{' '}
-                <Link 
-                  href="https://github.com/ZellRaihan"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-green-600 hover:text-green-700 transition-colors font-medium"
-                >
-                  Zell Raihan
-                </Link>
-              </span>
+        {/* Legal Section */}
+        <div className="border-t border-gray-200 pt-8">
+          <div className="text-center">
+            {/* Legal Links */}
+            <div className="mb-6 flex justify-center space-x-6">
+              <Link 
+                href="/privacy-policy" 
+                className="text-gray-600 hover:text-green-600 transition-colors text-sm"
+              >
+                Privacy Policy
+              </Link>
+              <Link 
+                href="/terms" 
+                className="text-gray-600 hover:text-green-600 transition-colors text-sm"
+              >
+                Terms & Conditions
+              </Link>
+              <Link 
+                href="/responsible-gaming" 
+                className="text-gray-600 hover:text-green-600 transition-colors text-sm"
+              >
+                Responsible Gaming
+              </Link>
             </div>
+
+            {/* Copyright */}
+            <p className="text-gray-600 text-sm">
+              &copy; {new Date().getFullYear()} IrishLottoResults.co.uk - All rights reserved.
+            </p>
+
+            {/* Disclaimer */}
+            <p className="mt-4 text-xs text-gray-500 max-w-2xl mx-auto">
+              This website is not affiliated with or endorsed by the Irish National Lottery.
+              Please gamble responsibly and be aware of your local jurisdiction's gambling laws.
+              If you feel you may have a gambling problem, please visit{" "}
+              <a 
+                href="https://www.gamcare.org.uk" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-green-600 hover:underline"
+              >
+                GamCare
+              </a>
+              {" "}for support.
+            </p>
           </div>
         </div>
       </div>
+
+      {/* Bottom Wave Pattern */}
+      <div className="absolute bottom-0 left-0 right-0 h-8 bg-[url('/wave.svg')] bg-repeat-x opacity-10 transform rotate-180"></div>
     </footer>
-  );
+  )
 }
+
+export default Footer

@@ -4,17 +4,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Header() {
   const pathname = usePathname();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const navItems = [
-    { name: 'Latest Results', href: '/' },
-    { name: 'Results History', href: '/results/history' },
-  ];
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -58,54 +52,55 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-                  pathname === item.href
-                    ? "bg-green-50 text-green-600"
-                    : "text-muted-foreground hover:bg-green-50 hover:text-green-600"
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
+            <a 
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-green-50 hover:text-green-600 aria-[current=page]:bg-green-50 aria-[current=page]:text-green-600" 
+              href="/"
+              aria-current={pathname === "/" ? "page" : undefined}
+            >
+              Latest Results
+            </a>
+            <a 
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-green-50 hover:text-green-600 aria-[current=page]:bg-green-50 aria-[current=page]:text-green-600"
+              href="/results/history"
+              aria-current={pathname === "/results/history" ? "page" : undefined}
+            >
+              Results History
+            </a>
           </nav>
 
           {/* Mobile Menu Button */}
-          <button
+          <button 
             className="md:hidden p-2 rounded-lg hover:bg-accent"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-menu h-6 w-6">
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
           </button>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t">
-            <nav className="flex flex-col space-y-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={cn(
-                    "px-4 py-3 rounded-lg text-sm font-medium transition-colors",
-                    pathname === item.href
-                      ? "bg-green-50 text-green-600"
-                      : "text-muted-foreground hover:bg-green-50 hover:text-green-600"
-                  )}
-                >
-                  {item.name}
-                </Link>
-              ))}
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden">
+            <nav className="flex flex-col p-4 space-y-2">
+              <a 
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-green-50 hover:text-green-600 aria-[current=page]:bg-green-50 aria-[current=page]:text-green-600"
+                href="/"
+                aria-current={pathname === "/" ? "page" : undefined}
+              >
+                Latest Results
+              </a>
+              <a 
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-green-50 hover:text-green-600 aria-[current=page]:bg-green-50 aria-[current=page]:text-green-600"
+                href="/results/history"
+                aria-current={pathname === "/results/history" ? "page" : undefined}
+              >
+                Results History
+              </a>
             </nav>
           </div>
         )}

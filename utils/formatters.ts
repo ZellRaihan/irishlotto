@@ -34,6 +34,21 @@ export function formatDublinDate(date: string | Date): string {
   return format(dublinDate, "do MMMM EEEE yyyy", { locale: enIE }) + " Irish Lotto Results"
 }
 
+export function formatFullDate(date: Date | string): string {
+  const d = new Date(date)
+  const day = d.getDate()
+  const suffix = (day: number) => {
+    if (day > 3 && day < 21) return 'th';
+    switch (day % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  }
+  return `${day}${suffix(day)} ${format(d, "MMMM EEEE yyyy")}`
+}
+
 // Helper function to get current Dublin time
 export function getCurrentDublinTime(): Date {
   return toZonedTime(new Date(), dublinTz)

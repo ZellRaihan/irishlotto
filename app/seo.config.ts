@@ -4,11 +4,23 @@ import { OpenGraph } from "next/dist/lib/metadata/types/opengraph-types"
 export const siteConfig = {
   name: "Irish Lotto Results",
   description: "Get the latest Irish Lotto results, check numbers, and view historical draws. Official source for Irish lottery numbers and jackpot information.",
-  url: "https://irishlottoresults.ie", // Replace with your actual domain
-  ogImage: "https://irishlottoresults.ie/og.jpg", // Replace with your actual OG image
-  links: {
-    twitter: "https://twitter.com/irishlotto",
-    github: "https://github.com/ZellRaihan"
+  url: "https://irishlottoresults.co.uk",
+  ogImage: "https://irishlottoresults.co.uk/og-image.jpg",
+  social: {
+    twitter: "https://twitter.com/irishlottoresults",
+    facebook: "https://facebook.com/irishlottoresults",
+    instagram: "https://instagram.com/irishlottoresults",
+    youtube: "https://youtube.com/@irishlottoresults",
+    linkedin: "https://linkedin.com/company/irishlottoresults",
+    pinterest: "https://pinterest.com/irishlottoresults"
+  },
+  socialHandles: {
+    twitter: "@irishlottoresults",
+    facebook: "irishlottoresults",
+    instagram: "@irishlottoresults",
+    youtube: "@irishlottoresults",
+    linkedin: "irishlottoresults",
+    pinterest: "irishlottoresults"
   },
   keywords: [
     "Irish Lotto",
@@ -17,8 +29,17 @@ export const siteConfig = {
     "Lotto Numbers",
     "Irish Lotto Results",
     "Lottery Checker",
-    "Ireland Lottery"
-  ]
+    "Ireland Lottery",
+    "Irish Lottery Results Today",
+    "Irish Lotto Numbers",
+    "Irish Lottery Numbers",
+    "Irish Lotto Checker"
+  ],
+  verification: {
+    google: "YOUR_GOOGLE_VERIFICATION_ID",
+    bing: "YOUR_BING_VERIFICATION_ID",
+    yandex: "YOUR_YANDEX_VERIFICATION_ID"
+  }
 }
 
 export type SeoProps = {
@@ -39,12 +60,32 @@ export function constructMetadata({
 }: SeoProps): Metadata {
   return {
     title: {
-      default: `${title} | ${siteConfig.name}`,
-      template: `%s | ${siteConfig.name}`,
+      default: title,
+      template: "%s",
     },
     description,
+    keywords: siteConfig.keywords,
+    authors: [{ name: "Zell Raihan" }],
+    creator: "Zell Raihan",
+    publisher: siteConfig.name,
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    verification: {
+      google: siteConfig.verification.google,
+      bing: siteConfig.verification.bing,
+      yandex: siteConfig.verification.yandex,
+    },
     openGraph: {
-      title: `${title} | ${siteConfig.name}`,
+      title: title,
       description,
       url,
       siteName: siteConfig.name,
@@ -56,44 +97,46 @@ export function constructMetadata({
           alt: title,
         },
       ],
-      locale: "en_IE",
-      ...(type === "article" ? { type: "article" } : { type: "website" }),
+      locale: "en_GB",
+      type,
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: title,
       description,
       images: [image],
-      creator: "@irishlotto",
+      creator: siteConfig.socialHandles.twitter,
+      site: siteConfig.socialHandles.twitter,
     },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large' as const,
-        'max-snippet': -1,
-      },
-    },
-    icons: {
-      icon: "/favicon.ico",
-      shortcut: "/favicon-16x16.png",
-      apple: "/apple-touch-icon.png",
-    },
-    manifest: "/site.webmanifest",
     alternates: {
       canonical: url,
     },
-    metadataBase: new URL(url),
-    authors: [{ name: "Zell Raihan" }],
-    creator: "Zell Raihan",
-    verification: {
-      google: "your-google-site-verification",
-      other: {
-        yandex: "your-yandex-verification",
-      },
+    metadataBase: new URL(siteConfig.url),
+    generator: "Next.js",
+    applicationName: siteConfig.name,
+    referrer: "origin-when-cross-origin",
+    icons: {
+      icon: [
+        { url: "/favicon.ico" },
+        { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+        { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" }
+      ],
+      apple: [
+        { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }
+      ],
+      other: [
+        {
+          rel: "mask-icon",
+          url: "/android-chrome-192x192.png",
+        }
+      ],
+    },
+    manifest: "/site.webmanifest",
+    category: "Games & Entertainment",
+    appleWebApp: {
+      capable: true,
+      title: siteConfig.name,
+      statusBarStyle: "default",
     },
   }
 }

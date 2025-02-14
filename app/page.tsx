@@ -12,15 +12,24 @@ import { Metadata } from "next"
 import { constructMetadata } from "./seo.config"
 import Image from 'next/image';
 import clsx from 'clsx';
+import HomeFAQ from '@/components/home-faq';
 
 export const metadata: Metadata = constructMetadata({
-  title: "Irish Lotto Results Tonight 3 Draws - CHECK NOW",
-  description: "Latest Irish Lotto results for tonight's draw. Check winning numbers and prizes for all 3 draws - Main Draw, Lotto Plus 1, and Lotto Plus 2. Updated instantly after each draw.",
-  type: "website"
+  title: "Irish Lotto Results Tonight | Latest Numbers & Prize Breakdown",
+  description: "Check tonight's Irish Lotto results instantly! View winning numbers, prize breakdowns, and jackpot amounts for all 3 draws - Main Draw, Plus 1, and Plus 2. Updated live after each draw.",
+  type: "website",
+  keywords: [
+    "Irish Lotto Results Tonight",
+    "Irish Lottery Numbers",
+    "Irish Lotto Winning Numbers",
+    "Irish Lotto Prize Breakdown",
+    "Irish Lottery Results Today"
+  ]
 })
 
-// Remove force-dynamic, use revalidate instead
-export const revalidate = 3600 // Cache for 1 hour
+// Force SSR
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 async function getLotteryResults(): Promise<{
   latest: WithId<LotteryDraw>;
@@ -96,7 +105,7 @@ function ResultBox({
   return (
     <div
       className={clsx(
-        "bg-white rounded-xl shadow-sm overflow-hidden",
+        "bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md",
         isHighlighted && "ring-2 ring-blue-500"
       )}
     >
@@ -107,7 +116,7 @@ function ResultBox({
             <LotteryLogo variant={variant} className="h-8" />
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500">Jackpot</div>
+            <div className="text-xs text-gray-500 font-medium">Jackpot</div>
             <div className="text-base font-semibold text-green-600">
               {formatCurrency(jackpotAmount)}
             </div>
@@ -119,10 +128,11 @@ function ResultBox({
       <div className="p-4 space-y-4">
         {/* Main Numbers */}
         <div className="grid grid-cols-6 gap-2">
-          {numbers.map((number) => (
+          {numbers.map((number, index) => (
             <div
               key={number}
-              className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center text-base font-semibold text-blue-700"
+              className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center text-base font-semibold text-blue-700 transform transition-transform duration-300 hover:scale-110"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
               {number}
             </div>
@@ -131,8 +141,8 @@ function ResultBox({
 
         {/* Bonus */}
         <div className="flex items-center justify-center gap-2">
-          <div className="text-sm font-medium text-gray-500">Bonus</div>
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-50 to-yellow-50 flex items-center justify-center text-base font-semibold text-amber-600">
+          <div className="text-sm font-medium text-gray-500">Bonus Ball</div>
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-50 to-yellow-50 flex items-center justify-center text-base font-semibold text-amber-600 transform transition-transform duration-300 hover:scale-110">
             {bonus}
           </div>
         </div>
@@ -161,24 +171,26 @@ export default async function Home() {
       <div className="bg-gradient-to-r from-blue-50 to-green-50 p-3 sm:p-4 rounded-xl shadow-sm">
         <div className="text-center space-y-4">
           <div className="space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Irish Lottery Results
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Irish Lottery Results Tonight
+              </span>
             </h1>
-            <h2 className="text-lg sm:text-xl text-gray-600 flex items-center justify-center gap-2">
+            <p className="text-lg sm:text-xl text-gray-600 flex items-center justify-center gap-2">
               <Calendar className="w-5 h-5 text-blue-600" />
-              Results for {formatDublinDate(currentData.drawDate)}
-            </h2>
+              {formatDublinDate(currentData.drawDate)}
+            </p>
           </div>
-          <div className="inline-flex items-center bg-white rounded-lg shadow-sm p-1.5 border border-gray-100">
+          <div className="inline-flex items-center bg-white rounded-lg shadow-sm p-1.5 border border-gray-100 hover:shadow-md transition-shadow duration-300">
             <LotteryDatePicker selected={new Date(currentData.drawDate)} />
           </div>
         </div>
 
         {showComingSoon && (
           <div className="mt-8 sm:mt-10">
-            <div className="mb-8 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-4 sm:p-6">
+            <div className="mb-8 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-4 sm:p-6 hover:shadow-md transition-shadow duration-300">
               <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-                <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center animate-pulse">
                   <Timer className="w-6 h-6 text-blue-600" />
                 </div>
                 <div className="flex-grow space-y-3">
@@ -304,6 +316,7 @@ export default async function Home() {
           </Link>
         </div>
       </div>
+      <HomeFAQ />
     </div>
   )
 }
