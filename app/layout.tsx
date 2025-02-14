@@ -6,14 +6,20 @@ import Footer from "@/components/footer"
 import { constructMetadata } from './seo.config'
 import JsonLd from '@/components/json-ld'
 import { LoadingProvider } from "@/components/loading-provider"
+import { cn } from '@/lib/utils'
 
 const inter = Inter({ subsets: ["latin"] })
+
+const baseUrl = process.env.VERCEL_URL 
+  ? `https://${process.env.VERCEL_URL}`
+  : 'http://localhost:3000'
 
 export const metadata: Metadata = {
   ...constructMetadata({
     title: "Irish Lotto Results - Latest Winning Numbers & Prize Breakdown",
     description: "Get instant Irish Lotto results, winning numbers, and prize breakdowns for all 3 draws. Updated live after each Wednesday and Saturday draw. Check your tickets now!",
   }),
+  metadataBase: new URL(baseUrl),
   icons: {
     icon: [
       { url: '/favicon.ico' },
@@ -24,11 +30,10 @@ export const metadata: Metadata = {
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
     ],
     other: [
-      { rel: 'mask-icon', url: '/android-chrome-192x192.png' }
+      { rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#22c55e' }
     ]
   },
   manifest: '/site.webmanifest',
-  themeColor: '#ffffff',
   formatDetection: {
     telephone: false
   }
@@ -42,26 +47,30 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#22c55e" />
+        <meta name="msapplication-TileColor" content="#22c55e" />
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta httpEquiv="Pragma" content="no-cache" />
         <meta httpEquiv="Expires" content="0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className={inter.className}>
-        <div className="relative min-h-screen flex flex-col">
-          <JsonLd type="Website" />
-          <JsonLd type="Organization" />
+      <body className={cn("min-h-screen bg-background font-sans antialiased", inter.className)}>
+        <div className="relative flex min-h-screen flex-col">
           <Header />
-          <LoadingProvider>
-            <main className="flex-1">
-              <div className="py-6">
+          <div className="flex-1">
+            <LoadingProvider>
+              <main className="py-6">
                 {children}
-              </div>
-            </main>
-          </LoadingProvider>
+              </main>
+            </LoadingProvider>
+          </div>
           <Footer />
         </div>
       </body>
