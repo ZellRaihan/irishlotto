@@ -44,7 +44,7 @@ export default function LotteryResults() {
 
   return (
     <div className="space-y-8">
-      {results.map((draw) => (
+      {results && results.length > 0 && results.map((draw) => (
         <div key={draw._id} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in" role="region" aria-label="Latest lottery results">
           {/* Main Draw */}
           <div className="bg-white rounded-xl shadow-lg p-6 transform hover:scale-[1.02] transition-all duration-300" role="article" aria-labelledby="main-draw-heading">
