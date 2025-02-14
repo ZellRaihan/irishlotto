@@ -12,12 +12,15 @@ const inter = Inter({ subsets: ["latin"] })
 
 const baseUrl = process.env.VERCEL_URL 
   ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000'
+  : process.env.NODE_ENV === 'production'
+    ? 'https://www.irishlottoresults.co.uk'
+    : 'http://localhost:3000'
 
 export const metadata: Metadata = {
   ...constructMetadata({
     title: "Irish Lotto Results - Latest Winning Numbers & Prize Breakdown",
     description: "Get instant Irish Lotto results, winning numbers, and prize breakdowns for all 3 draws. Updated live after each Wednesday and Saturday draw. Check your tickets now!",
+    url: baseUrl,
   }),
   metadataBase: new URL(baseUrl),
   icons: {

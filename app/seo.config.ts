@@ -4,8 +4,8 @@ import { OpenGraph } from "next/dist/lib/metadata/types/opengraph-types"
 export const siteConfig = {
   name: "Irish Lotto Results",
   description: "Get the latest Irish Lotto results, check numbers, and view historical draws. Official source for Irish lottery numbers and jackpot information.",
-  url: "https://irishlottoresults.co.uk",
-  ogImage: "https://irishlottoresults.co.uk/og-image.jpg",
+  url: "https://www.irishlottoresults.co.uk",
+  ogImage: "https://www.irishlottoresults.co.uk/og-image.jpg",
   social: {
     twitter: "https://twitter.com/irishlottoresults",
     facebook: "https://facebook.com/irishlottoresults",
@@ -58,6 +58,8 @@ export function constructMetadata({
   url = siteConfig.url,
   type = "website",
 }: SeoProps): Metadata {
+  const metadataBase = new URL(siteConfig.url)
+  
   return {
     title: {
       default: title,
@@ -112,6 +114,6 @@ export function constructMetadata({
     alternates: {
       canonical: url,
     },
-    metadataBase: new URL(siteConfig.url),
+    metadataBase,
   }
 }
