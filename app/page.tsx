@@ -20,10 +20,10 @@ export const metadata: Metadata = constructMetadata({
   type: "website",
   keywords: [
     "Irish Lotto Results Tonight",
-    "Irish Lottery Numbers",
+    "Irish Lotto Numbers",
     "Irish Lotto Winning Numbers",
     "Irish Lotto Prize Breakdown",
-    "Irish Lottery Results Today"
+    "Irish Lotto Results Today"
   ]
 })
 
@@ -173,7 +173,7 @@ export default async function Home() {
           <div className="space-y-2">
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Irish Lottery Results Tonight
+                Irish Lotto Results Tonight
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 flex items-center justify-center gap-2">
@@ -199,7 +199,7 @@ export default async function Home() {
                       Next Draw Coming Soon
                     </h3>
                     <p className="text-gray-600">
-                      The next Irish Lottery draw will be held on {formatDublinDate(nextDrawDate!)}. Check back for the latest results!
+                      The next Irish Lotto draw will be held on {formatDublinDate(nextDrawDate!)}. Check back for the latest results!
                     </p>
                   </div>
                   <div>
