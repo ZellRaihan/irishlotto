@@ -16,7 +16,7 @@ import HomeFAQ from '@/components/home-faq';
 
 export const metadata: Metadata = constructMetadata({
   title: "Irish Lotto Results Tonight | Latest Numbers & Prize Breakdown",
-  description: "Check tonight's Irish Lotto results instantly! View winning numbers, prize breakdowns, and jackpot amounts for all 3 draws - Main Draw, Plus 1, and Plus 2. Updated live after each draw.",
+  description: "Latest Irish Lotto results for tonight's draw. Check winning numbers and prizes for all 3 draws - Main Draw, Lotto Plus 1, and Lotto Plus 2.",
   type: "website",
   keywords: [
     "Irish Lotto Results Tonight",
