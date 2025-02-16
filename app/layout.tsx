@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import "./globals.css"
 import Header from "@/components/header"
@@ -22,6 +22,12 @@ const baseUrl = process.env.VERCEL_URL
     ? 'https://www.irishlottoresults.co.uk'
     : 'http://localhost:3000'
 
+export const viewport: Viewport = {
+  themeColor: '#22c55e',
+  width: 'device-width',
+  initialScale: 1
+}
+
 export const metadata: Metadata = {
   ...constructMetadata({
     title: "Irish Lotto Results - Latest Winning Numbers & Prize Breakdown",
@@ -31,7 +37,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   icons: {
     icon: [
-      { url: '/favicon.ico' },
+      { url: '/favicon.ico', sizes: 'any' },
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
       { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' }
@@ -62,23 +68,22 @@ export default function RootLayout({
         <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
         
-        {/* Primary Favicon Configuration */}
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        {/* Primary Favicon */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         
-        {/* Multiple Favicon Sizes */}
+        {/* Multiple PNG Sizes */}
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
         
-        {/* Apple Touch Icons */}
+        {/* Apple Touch Icon */}
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         
         {/* Web App Manifest */}
         <link rel="manifest" href="/site.webmanifest" />
         
-        {/* Theme Colors */}
-        <meta name="msapplication-TileColor" content="#22c55e" />
-        <meta name="theme-color" content="#22c55e" />
+        {/* Viewport */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         
         {/* Cache Control */}
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />

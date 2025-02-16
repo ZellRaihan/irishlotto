@@ -96,21 +96,6 @@ export default async function HistoryPage() {
           </div>
         </div>
 
-        {/* Filter Section */}
-        <div className="flex justify-center">
-          <div className="flex gap-2">
-            <Button variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50">
-              This Week
-            </Button>
-            <Button variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50">
-              This Month
-            </Button>
-            <Button variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50">
-              This Year
-            </Button>
-          </div>
-        </div>
-
         {/* Results Grid */}
         <div className="grid gap-4">
           {results.map((result) => (
