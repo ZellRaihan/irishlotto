@@ -64,13 +64,22 @@ export default function RootLayout({
         <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
         
-        {/* Favicon Configuration */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        {/* Primary Favicon for Google Search */}
+        <link rel="icon" href="/favicon.ico" />
+        
+        {/* Additional Favicon Sizes */}
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+        
+        {/* Apple Touch Icons */}
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        
+        {/* Web Manifest */}
         <link rel="manifest" href="/site.webmanifest" />
+        
+        {/* Theme Colors */}
         <meta name="msapplication-TileColor" content="#22c55e" />
         <meta name="theme-color" content="#22c55e" />
         
