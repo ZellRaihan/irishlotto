@@ -50,14 +50,14 @@ async function getLotteryResults(): Promise<{
       .limit(1)
       .toArray();
 
-    // Get past 5 results excluding the latest
+    // Get past 3 results excluding the latest
     const pastResults = await db
       .collection<LotteryDraw>("lottoresults")
       .find({
         _id: { $ne: latestResult[0]._id }
       })
       .sort({ drawDate: -1 })
-      .limit(5)
+      .limit(3)
       .toArray();
 
     return {
