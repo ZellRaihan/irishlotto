@@ -86,12 +86,6 @@ const Footer = () => {
                 Results History
               </Link>
               <Link 
-                href="/statistics" 
-                className="block text-gray-600 hover:text-green-600 transition-colors"
-              >
-                Statistics
-              </Link>
-              <Link 
                 href="/how-to-play" 
                 className="block text-gray-600 hover:text-green-600 transition-colors"
               >

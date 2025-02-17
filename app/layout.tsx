@@ -16,11 +16,9 @@ const inter = Inter({
   fallback: ['system-ui', 'arial'],
 })
 
-const baseUrl = process.env.VERCEL_URL 
-  ? `https://${process.env.VERCEL_URL}`
-  : process.env.NODE_ENV === 'production'
-    ? 'https://www.irishlottoresults.co.uk'
-    : 'http://localhost:3000'
+const baseUrl = process.env.NODE_ENV === 'production'
+  ? 'https://www.irishlottoresults.co.uk'
+  : 'http://localhost:3000'
 
 export const viewport: Viewport = {
   themeColor: '#22c55e',

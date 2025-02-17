@@ -4,7 +4,9 @@ import { OpenGraph } from "next/dist/lib/metadata/types/opengraph-types"
 export const siteConfig = {
   name: "Irish Lotto Results",
   description: "Get the latest Irish Lotto results, check numbers, and view historical draws. Official source for Irish lottery numbers and jackpot information.",
-  url: "https://www.irishlottoresults.co.uk",
+  url: process.env.NODE_ENV === 'production' 
+    ? "https://www.irishlottoresults.co.uk"
+    : "http://localhost:3000",
   ogImage: "https://www.irishlottoresults.co.uk/og-image.jpg",
   social: {
     twitter: "https://twitter.com/irishlottoresults",

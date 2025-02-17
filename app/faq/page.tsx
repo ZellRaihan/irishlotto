@@ -20,8 +20,8 @@ const faqs = [
     answer: "Our database includes Irish Lotto results from January 2022 onwards. You can access all historical results through our Results History page."
   },
   {
-    question: "What information is provided with each result?",
-    answer: "For each draw, we provide the winning numbers, bonus number, draw date, and jackpot amount. You can also view additional information such as prize breakdowns and number frequency statistics."
+    question: "What information is available for each draw?",
+    answer: "For each draw, we provide the winning numbers, bonus number, draw date, and jackpot amount. You can also view additional information such as prize breakdowns."
   },
   {
     question: "Is the website mobile-friendly?",
