@@ -26,9 +26,9 @@ export default function Header() {
                 priority
               />
               <div className="hidden sm:block">
-                <h1 className="text-xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
+                <div className="text-xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
                   Irish Lotto
-                </h1>
+                </div>
                 <p className="text-xs text-muted-foreground">Results & History</p>
               </div>
             </div>
