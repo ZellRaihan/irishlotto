@@ -52,8 +52,8 @@ export default function HomeFAQ() {
         {JSON.stringify(faqSchema)}
       </Script>
 
-      <div className="container px-6 py-12">
-        <div className="text-center mb-8">
+      <div className="container px-4 py-6">
+        <div className="text-center mb-4">
           <h2 className="text-3xl font-bold text-gray-900">
             Frequently Asked Questions
           </h2>
@@ -64,8 +64,8 @@ export default function HomeFAQ() {
 
         <div className="max-w-3xl mx-auto">
           <div className="grid gap-4">
-            <div className="bg-white rounded-xl shadow-lg p-6 animate-fade-in-up">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">Frequently Asked Questions</h2>
+            <div className="bg-white rounded-xl shadow-lg p-4 animate-fade-in-up">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Frequently Asked Questions</h2>
               
               <div className="space-y-4">
                 {faqItems.map((item, index) => (

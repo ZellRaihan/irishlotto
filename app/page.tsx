@@ -316,6 +316,22 @@ export default async function Home() {
           </Link>
         </div>
       </div>
+
+      {/* Irish Lotto Banner */}
+      <div className="relative w-full h-48 sm:h-64 rounded-xl overflow-hidden shadow-lg">
+        {/* Glowing background effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/30 to-green-400/30 animate-pulse" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30" />
+        <Image
+          src="/og-image.webp"
+          alt="Irish Lotto Results - Your trusted source for lottery numbers and prize breakdowns"
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 95vw, 896px"
+          priority
+        />
+      </div>
+
       <HomeFAQ />
     </div>
   )
