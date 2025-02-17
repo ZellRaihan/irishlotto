@@ -7,7 +7,7 @@ export const siteConfig = {
   url: process.env.NODE_ENV === 'production' 
     ? "https://www.irishlottoresults.co.uk"
     : "http://localhost:3000",
-  ogImage: "https://www.irishlottoresults.co.uk/og-image.jpg",
+  ogImage: "https://www.irishlottoresults.co.uk/og-image.webp",
   social: {
     twitter: "https://twitter.com/irishlottoresults",
     facebook: "https://facebook.com/irishlottoresults",
