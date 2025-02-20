@@ -7,6 +7,7 @@ import { constructMetadata } from './seo.config'
 import JsonLd from '@/components/json-ld'
 import { LoadingProvider } from "@/components/loading-provider"
 import { cn } from '@/lib/utils'
+import Script from 'next/script'
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -87,6 +88,21 @@ export default function RootLayout({
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta httpEquiv="Pragma" content="no-cache" />
         <meta httpEquiv="Expires" content="0" />
+        
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-Y4N21QTYZ1"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-Y4N21QTYZ1');
+          `}
+        </Script>
       </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased", inter.className)}>
         <div className="relative flex min-h-screen flex-col">
