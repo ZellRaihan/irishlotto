@@ -99,9 +99,9 @@ export default function RootLayout({
         <meta name="application-name" content="Irish Lotto" />
         
         {/* Google AdSense */}
-        <Script
+        <script 
+          async 
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3793157906983146"
-          strategy="afterInteractive"
           crossOrigin="anonymous"
         />
         
