@@ -67,7 +67,7 @@ export default function RootLayout({
         <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
         
-        {/* Primary Favicon */}
+        {/* Default favicon */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         
         {/* Multiple PNG Sizes */}
@@ -78,8 +78,16 @@ export default function RootLayout({
         {/* Apple Touch Icon */}
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         
+        {/* Android Chrome Icons */}
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+        
         {/* Web App Manifest */}
         <link rel="manifest" href="/site.webmanifest" />
+        
+        {/* Browser Theme */}
+        <meta name="theme-color" content="#22c55e" />
+        <meta name="msapplication-TileColor" content="#22c55e" />
         
         {/* Viewport */}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
