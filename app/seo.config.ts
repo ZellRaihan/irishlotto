@@ -5,9 +5,9 @@ export const siteConfig = {
   name: "Irish Lotto Results",
   description: "Get the latest Irish Lotto results, check numbers, and view historical draws. Official source for Irish lottery numbers and jackpot information.",
   url: process.env.NODE_ENV === 'production' 
-    ? "https://www.irishlottoresults.co.uk"
+    ? "https://irishlottoresults.co.uk"
     : "http://localhost:3000",
-  ogImage: "https://www.irishlottoresults.co.uk/og-image.webp",
+  ogImage: "https://irishlottoresults.co.uk/og-image.webp",
   social: {
     twitter: "https://twitter.com/irishlottoresults",
     facebook: "https://facebook.com/irishlottoresults",

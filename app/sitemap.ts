@@ -14,11 +14,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .toArray()
 
     // Base URL for all routes
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}`
-      : process.env.NODE_ENV === 'production'
-        ? 'https://www.irishlottoresults.co.uk'
-        : 'http://localhost:3000'
+    const baseUrl = process.env.NODE_ENV === 'production'
+      ? 'https://irishlottoresults.co.uk'
+      : 'http://localhost:3000'
 
     // Create URLs for each lottery result
     const resultUrls = results.map((result) => ({
@@ -75,9 +73,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Return only static routes if database connection fails
     return [
       {
-        url: 'https://www.irishlottoresults.co.uk',
+        url: 'https://irishlottoresults.co.uk',
         lastModified: new Date(),
-        changeFrequency: 'daily' as const,
+        changeFrequency: 'always' as const,
         priority: 1,
       }
     ]

@@ -175,12 +175,13 @@ const Footer = () => {
             {/* Copyright */}
             <p className="text-gray-600 text-sm">
               &copy; {new Date().getFullYear()}{" "}
-              <a 
-                href="https://www.irishlottoresults.co.uk" 
-                className="text-green-600 hover:underline"
+              <Link
+                className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
+                href="https://irishlottoresults.co.uk" 
+                title="Irish Lotto Results"
               >
                 IrishLottoResults.co.uk
-              </a>
+              </Link>
               {" "}- All rights reserved.
             </p>
 

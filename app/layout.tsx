@@ -18,7 +18,7 @@ const inter = Inter({
 })
 
 const baseUrl = process.env.NODE_ENV === 'production'
-  ? 'https://www.irishlottoresults.co.uk'
+  ? 'https://irishlottoresults.co.uk'
   : 'http://localhost:3000'
 
 export const viewport: Viewport = {
