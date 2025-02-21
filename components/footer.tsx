@@ -106,11 +106,9 @@ const Footer = () => {
               Contact & Support
             </h3>
             <div className="space-y-4">
-              <div className="flex items-center space-x-3 text-gray-600">
-                <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-                  <Mail className="h-4 w-4" />
-                </div>
-                <span>support@irishlottoresults.co.uk</span>
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-gray-600" />
+                <span>contact@irishlottoresults.co.uk</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-600">
                 <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
