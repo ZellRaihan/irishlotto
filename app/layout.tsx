@@ -98,6 +98,14 @@ export default function RootLayout({
         <meta name="msapplication-TileColor" content="#22c55e" />
         <meta name="application-name" content="Irish Lotto" />
         
+        {/* Google AdSense */}
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+          data-ad-client="ca-pub-3793157906983146"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
+        
         {/* Viewport */}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
