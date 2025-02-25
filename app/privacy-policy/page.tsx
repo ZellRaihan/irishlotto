@@ -58,7 +58,7 @@ export default function PrivacyPolicy() {
         </p>
         <ul>
           <li>Email: contact@irishlottoresults.co.uk</li>
-          <li>Website: irishlottoresults.co.uk</li>
+          <li>Website: www.irishlottoresults.co.uk</li>
         </ul>
       </div>
     </PageContainer>

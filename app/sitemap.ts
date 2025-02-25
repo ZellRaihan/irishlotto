@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Base URL for all routes
     const baseUrl = process.env.NODE_ENV === 'production'
-      ? 'https://irishlottoresults.co.uk'
+      ? 'https://www.irishlottoresults.co.uk'
       : 'http://localhost:3000'
 
     // Create URLs for each lottery result
@@ -73,7 +73,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Return only static routes if database connection fails
     return [
       {
-        url: 'https://irishlottoresults.co.uk',
+        url: 'https://www.irishlottoresults.co.uk',
         lastModified: new Date(),
         changeFrequency: 'always' as const,
         priority: 1,

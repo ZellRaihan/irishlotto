@@ -16,7 +16,7 @@ export async function checkResultExists(date: string): Promise<boolean> {
   try {
     const client = await clientPromise
     const db = client.db("lottery")
-    
+
     const result = await db
       .collection<LotteryDraw>("lottoresults")
       .findOne({ _id: date })
@@ -32,7 +32,7 @@ async function getLatestResult(): Promise<LotteryDraw | null> {
   try {
     const client = await clientPromise
     const db = client.db("lottery")
-    
+
     const latestResult = await db
       .collection<LotteryDraw>("lottoresults")
       .find({})
@@ -61,16 +61,16 @@ function getNextDrawDate(date: Date): Date {
 
 function shouldShowComingSoon(requestedDate: Date, latestResult: LotteryDraw | null): boolean {
   if (!latestResult) return false
-  
+
   // If requested date is in the future, show coming soon
   if (requestedDate > new Date()) return true
-  
+
   // If latest result is more than 2 days old and requested date is after latest result
   const daysSinceLastDraw = differenceInDays(new Date(), new Date(latestResult.drawDate))
   if (daysSinceLastDraw >= 2 && requestedDate > new Date(latestResult.drawDate)) {
     return true
   }
-  
+
   return false
 }
 
@@ -86,7 +86,7 @@ export default async function NotFound() {
             { label: "Not Found" }
           ]}
         />
-        
+
         <div className="text-center">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
             Result Not Found
@@ -118,7 +118,7 @@ export default async function NotFound() {
 export async function generateMetadata({ params }: { params: { date: string } }): Promise<Metadata> {
   const currentDate = new Date(params.date)
   const nextDraw = getNextDrawDate(currentDate)
-  
+
   return constructMetadata({
     title: `Irish Lotto Results Coming Soon - ${format(currentDate, "EEEE, MMMM d, yyyy")}`,
     description: `Irish Lotto results for ${format(currentDate, "MMMM d, yyyy")} are not available yet. The next draw will be on ${format(nextDraw, "EEEE, MMMM d")}. Check back soon for the latest winning numbers and prizes.`,

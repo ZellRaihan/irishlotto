@@ -9,7 +9,7 @@ export default function Terms() {
       <div className="prose prose-green max-w-none">
         <h2>1. Acceptance of Terms</h2>
         <p>
-          By accessing and using Irish Lotto Results (irishlottoresults.co.uk), you accept and agree to be bound by the terms
+          By accessing and using Irish Lotto Results (www.irishlottoresults.co.uk), you accept and agree to be bound by the terms
           and provision of this agreement.
         </p>
 
@@ -70,7 +70,7 @@ export default function Terms() {
         </p>
         <ul>
           <li>Email: contact@irishlottoresults.co.uk</li>
-          <li>Website: irishlottoresults.co.uk</li>
+          <li>Website: www.irishlottoresults.co.uk</li>
         </ul>
       </div>
     </PageContainer>

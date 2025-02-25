@@ -16,11 +16,11 @@ export default function JsonLd({ type, data }: JsonLdProps) {
         "@context": "https://schema.org",
         "@type": "WebSite",
         name: "Irish Lotto Results",
-        url: "https://irishlottoresults.ie",
+        url: "https://www.irishlottoresults.co.uk",
         description: "Get the latest Irish Lotto results, check winning numbers, and view historical draws.",
         potentialAction: {
           "@type": "SearchAction",
-          target: "https://irishlottoresults.ie/results/history?date={search_term_string}",
+          target: "https://www.irishlottoresults.co.uk/results/history?date={search_term_string}",
           "query-input": "required name=search_term_string",
         },
       };
@@ -31,8 +31,8 @@ export default function JsonLd({ type, data }: JsonLdProps) {
         "@context": "https://schema.org",
         "@type": "Organization",
         name: "Irish Lotto Results",
-        url: "https://irishlottoresults.ie",
-        logo: "https://irishlottoresults.ie/logo.png",
+        url: "https://www.irishlottoresults.co.uk",
+        logo: "https://www.irishlottoresults.co.uk/logo.png",
         sameAs: [
           "https://www.facebook.com/irishlottoresults",
           "https://twitter.com/irishlotto",
@@ -47,7 +47,7 @@ export default function JsonLd({ type, data }: JsonLdProps) {
         "@type": "Game",
         name: `Irish Lotto Results - ${formatDate(data.drawDate)}`,
         description: `Irish Lotto results and winning numbers for ${formatDate(data.drawDate)}. Jackpot: ${data.mainDraw.jackpotAmount}`,
-        url: `https://irishlottoresults.ie/results/${data._id}`,
+        url: `https://www.irishlottoresults.co.uk/results/${data._id}`,
         provider: {
           "@type": "Organization",
           name: "Irish National Lottery",

@@ -1,7 +1,7 @@
 const https = require('https');
 
-const domain = process.env.VERCEL_URL || 'your-domain.com'; // Replace with your actual domain
-const token = process.env.REVALIDATE_TOKEN || 'irishlotto_cache_2025'; // Replace with your token
+const domain = process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL || 'localhost:3000';
+const token = process.env.REVALIDATE_TOKEN || 'irishlotto_cache_2025';
 
 const url = `https://${domain}/api/clear-cache?token=${token}`;
 

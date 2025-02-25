@@ -175,7 +175,7 @@ const Footer = () => {
               &copy; {new Date().getFullYear()}{" "}
               <Link
                 className="text-gray-600 hover:text-gray-800 transition-colors duration-200"
-                href="https://irishlottoresults.co.uk" 
+                href="https://www.irishlottoresults.co.uk" 
                 title="Irish Lotto Results"
               >
                 IrishLottoResults.co.uk
