@@ -3,19 +3,20 @@ import { constructMetadata } from "@/app/seo.config"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Timer, Calendar } from "lucide-react"
-import { isSaturday, isWednesday, nextWednesday, nextSaturday, format, addDays, differenceInDays } from "date-fns"
+import { isSaturday, isWednesday, nextWednesday, nextSaturday, format, addDays, differenceInDays, isSameDay } from "date-fns"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import LotteryDatePicker from "@/components/lottery-date-picker"
-import { formatDublinDate } from "@/utils/formatters"
-import clientPromise from "@/lib/mongodb"
+import { formatDublinDate, getCurrentDublinTime, convertToDublinTime } from "@/utils/formatters"
+import clientPromise, { DB_NAME } from "@/lib/mongodb"
 import type { LotteryDraw } from "@/types/lottery"
 import { notFound } from "next/navigation"
+import { toZonedTime, formatInTimeZone } from "date-fns-tz"
 
 // This function will be used in the main page.tsx to check if result exists
 export async function checkResultExists(date: string): Promise<boolean> {
   try {
     const client = await clientPromise
-    const db = client.db("lottery")
+    const db = client.db(DB_NAME)
 
     const result = await db
       .collection<LotteryDraw>("lottoresults")
@@ -31,7 +32,7 @@ export async function checkResultExists(date: string): Promise<boolean> {
 async function getLatestResult(): Promise<LotteryDraw | null> {
   try {
     const client = await clientPromise
-    const db = client.db("lottery")
+    const db = client.db(DB_NAME)
 
     const latestResult = await db
       .collection<LotteryDraw>("lottoresults")
@@ -48,26 +49,50 @@ async function getLatestResult(): Promise<LotteryDraw | null> {
 }
 
 function getNextDrawDate(date: Date): Date {
-  if (isWednesday(date)) {
-    return nextSaturday(date)
+  // Define Dublin timezone
+  const DUBLIN_TIMEZONE = 'Europe/Dublin';
+  
+  // Convert to Dublin timezone using formatInTimeZone for consistency
+  const dateString = formatInTimeZone(
+    new Date(date),
+    DUBLIN_TIMEZONE,
+    'yyyy-MM-dd\'T\'HH:mm:ss.SSS'
+  );
+  const dublinDate = new Date(dateString);
+  
+  if (isWednesday(dublinDate)) {
+    return nextSaturday(dublinDate)
   }
-  if (isSaturday(date)) {
-    return nextWednesday(addDays(date, 1))
+  if (isSaturday(dublinDate)) {
+    return nextWednesday(addDays(dublinDate, 1))
   }
-  const nextWed = nextWednesday(date)
-  const nextSat = nextSaturday(date)
+  const nextWed = nextWednesday(dublinDate)
+  const nextSat = nextSaturday(dublinDate)
   return nextWed < nextSat ? nextWed : nextSat
 }
 
 function shouldShowComingSoon(requestedDate: Date, latestResult: LotteryDraw | null): boolean {
   if (!latestResult) return false
 
+  // Get current time in Dublin timezone using the utility function
+  const now = getCurrentDublinTime();
+  
+  // Convert dates to Dublin timezone using our utility function
+  const requestedDateDublin = convertToDublinTime(requestedDate);
+  
+  // If it's today but before 8 PM in Dublin, show coming soon
+  // This is critical for users in different time zones
+  if (isSameDay(requestedDateDublin, now) && now.getHours() < 20) {
+    return true;
+  }
+  
   // If requested date is in the future, show coming soon
-  if (requestedDate > new Date()) return true
+  if (requestedDateDublin > now) return true
 
   // If latest result is more than 2 days old and requested date is after latest result
-  const daysSinceLastDraw = differenceInDays(new Date(), new Date(latestResult.drawDate))
-  if (daysSinceLastDraw >= 2 && requestedDate > new Date(latestResult.drawDate)) {
+  const latestResultDateDublin = convertToDublinTime(new Date(latestResult.drawDate));
+  const daysSinceLastDraw = differenceInDays(now, latestResultDateDublin);
+  if (daysSinceLastDraw >= 2 && requestedDateDublin > latestResultDateDublin) {
     return true
   }
 

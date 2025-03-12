@@ -1,4 +1,8 @@
 const { MongoClient } = require('mongodb');
+require('dotenv').config();
+
+// Database name constant to ensure consistency
+const DB_NAME = process.env.DB_NAME || 'lottery';
 
 async function main() {
     const uri = process.env.MONGODB_URI;
@@ -12,7 +16,8 @@ async function main() {
         await client.connect();
         console.log('Connected to MongoDB');
 
-        const db = client.db('lottery');
+        const db = client.db(DB_NAME);
+        console.log(`Using database: ${DB_NAME}`);
         
         // List all collections
         const collections = await db.listCollections().toArray();

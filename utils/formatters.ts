@@ -1,6 +1,7 @@
 import { format } from "date-fns"
 import { enIE } from "date-fns/locale"
 import { toZonedTime } from "date-fns-tz"
+import { formatInTimeZone } from "date-fns-tz"
 
 const dublinTz = 'Europe/Dublin'
 
@@ -52,4 +53,20 @@ export function formatFullDate(date: Date | string): string {
 // Helper function to get current Dublin time
 export function getCurrentDublinTime(): Date {
   return toZonedTime(new Date(), dublinTz)
+}
+
+// Helper function to convert any date to Dublin timezone consistently
+export function convertToDublinTime(date: Date | string): Date {
+  // First ensure we have a proper Date object
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+  
+  // Convert to Dublin timezone string in ISO format
+  const dublinDateString = formatInTimeZone(
+    dateObj,
+    dublinTz,
+    'yyyy-MM-dd\'T\'HH:mm:ss.SSS'
+  );
+  
+  // Create a new Date object from the Dublin timezone string
+  return new Date(dublinDateString);
 }
