@@ -43,7 +43,7 @@ export function LoadingProvider({
     return () => clearTimeout(timer)
   }, [initialLoadDelay])
 
-  // Handle route changes
+  // Handle route changes - safely access searchParams
   useEffect(() => {
     const handleStart = () => {
       setIsLoading(true)
@@ -63,7 +63,7 @@ export function LoadingProvider({
     handleComplete()
 
     return () => {}
-  }, [pathname, searchParams])
+  }, [pathname, searchParams ? searchParams.toString() : ""])
 
   const startLoading = () => setIsLoading(true)
   const stopLoading = () => setIsLoading(false)

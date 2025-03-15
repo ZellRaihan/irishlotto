@@ -356,6 +356,15 @@ export async function generateMetadata({ params }: { params: { date: string } })
   }
 }
 
+// Wrap the date picker in a separate component
+function DatePickerWrapper({ date }: { date: string }) {
+  return (
+    <div className="bg-white rounded-lg shadow-sm p-1.5 border border-gray-100">
+      <LotteryDatePicker selected={new Date(date)} />
+    </div>
+  )
+}
+
 // Wrap the result fetching and rendering in a separate component
 async function ResultContent({ date }: { date: string }) {
   const result = await getLotteryResult(date);
@@ -401,9 +410,9 @@ async function ResultContent({ date }: { date: string }) {
               {formatDublinDate(result.drawDate)}
             </h1>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-1.5 border border-gray-100">
-            <LotteryDatePicker selected={new Date(result.drawDate)} />
-          </div>
+          <Suspense fallback={<div className="bg-white rounded-lg shadow-sm p-1.5 border border-gray-100 h-10 w-64 animate-pulse"></div>}>
+            <DatePickerWrapper date={result.drawDate} />
+          </Suspense>
         </div>
       </div>
 
@@ -490,9 +499,9 @@ export default async function LotteryResults({ params }: Props) {
                   {format(currentDate, "EEEE, MMMM d, yyyy")}
                 </h1>
               </div>
-              <div className="bg-white rounded-lg shadow-sm p-1.5 border border-gray-100">
-                <LotteryDatePicker selected={currentDate} />
-              </div>
+              <Suspense fallback={<div className="bg-white rounded-lg shadow-sm p-1.5 border border-gray-100 h-10 w-64 animate-pulse"></div>}>
+                <DatePickerWrapper date={params.date} />
+              </Suspense>
             </div>
           </div>
 

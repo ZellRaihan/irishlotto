@@ -2,13 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentDublinTime, convertToDublinTime } from '@/utils/formatters';
 import { format, isSameDay } from 'date-fns';
 
-// Set cache control headers to cache for a short period (5 seconds)
+// Make this route dynamic to avoid static generation issues
+export const dynamic = 'force-dynamic';
 export const revalidate = 5;
 
 export async function GET(request: NextRequest) {
   try {
-    // Get the target date from the query parameter
-    const searchParams = request.nextUrl.searchParams;
+    // Get the target date from the URL instead of using nextUrl.searchParams
+    const url = new URL(request.url);
+    const searchParams = url.searchParams;
     const targetDateParam = searchParams.get('targetDate');
     const forceShowParam = searchParams.get('forceShow');
     
