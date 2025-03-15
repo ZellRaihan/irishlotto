@@ -5,9 +5,9 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { constructMetadata } from './seo.config'
 import JsonLd from '@/components/json-ld'
-import { LoadingProvider } from "@/components/loading-provider"
 import { cn } from '@/lib/utils'
 import Script from 'next/script'
+import { Toaster } from 'sonner'
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -51,15 +51,13 @@ export const metadata: Metadata = {
   }
 }
 
-export const revalidate = 0; // Disable caching for all pages
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-IE" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -106,10 +104,10 @@ export default function RootLayout({
         {/* Viewport */}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
-        {/* Cache Control */}
-        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
+        {/* Cache Control - Updated for better performance */}
+        <meta httpEquiv="Cache-Control" content="public, max-age=300, stale-while-revalidate=3600" />
+        <meta httpEquiv="Pragma" content="public" />
+        <meta httpEquiv="Expires" content="300" />
         
         {/* Google Analytics */}
         <Script
@@ -130,14 +128,15 @@ export default function RootLayout({
         <div className="relative flex min-h-screen flex-col">
           <Header />
           <div className="flex-1">
-            <LoadingProvider>
-              <main className="py-6">
-                {children}
-              </main>
-            </LoadingProvider>
+            <main className="py-6">
+              {children}
+            </main>
           </div>
           <Footer />
         </div>
+        <Toaster position="top-right" richColors closeButton />
+        <JsonLd type="Website" />
+        <JsonLd type="Organization" />
       </body>
     </html>
   )

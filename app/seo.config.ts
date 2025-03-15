@@ -38,9 +38,10 @@ export const siteConfig = {
     "Irish Lotto Checker"
   ],
   verification: {
-    google: "YOUR_GOOGLE_VERIFICATION_ID",
-    bing: "YOUR_BING_VERIFICATION_ID",
-    yandex: "YOUR_YANDEX_VERIFICATION_ID"
+    // Replace these with your actual verification codes from search engine webmaster tools
+    google: "YOUR_GOOGLE_VERIFICATION_CODE",
+    bing: "YOUR_BING_VERIFICATION_CODE",
+    yandex: "YOUR_YANDEX_VERIFICATION_CODE"
   }
 }
 
@@ -101,8 +102,10 @@ export function constructMetadata({
           width: 1200,
           height: 630,
           alt: title,
+          type: "image/webp",
         },
       ],
+      locale: "en_IE",
       type,
     },
     twitter: {
@@ -115,6 +118,11 @@ export function constructMetadata({
     },
     alternates: {
       canonical: url,
+      languages: {
+        'en-IE': url,
+        'en-GB': url,
+        'en-US': url,
+      },
     },
     metadataBase,
   }

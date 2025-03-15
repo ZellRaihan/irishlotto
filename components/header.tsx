@@ -66,6 +66,20 @@ export default function Header() {
             >
               Results History
             </a>
+            <a 
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-green-50 hover:text-green-600 aria-[current=page]:bg-green-50 aria-[current=page]:text-green-600"
+              href="/check-numbers"
+              aria-current={pathname === "/check-numbers" ? "page" : undefined}
+            >
+              Number Checker
+            </a>
+            <a 
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-green-50 hover:text-green-600 aria-[current=page]:bg-green-50 aria-[current=page]:text-green-600"
+              href="/number-generator"
+              aria-current={pathname === "/number-generator" ? "page" : undefined}
+            >
+              Number Generator
+            </a>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -100,6 +114,20 @@ export default function Header() {
                 aria-current={pathname === "/results/history" ? "page" : undefined}
               >
                 Results History
+              </a>
+              <a 
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-green-50 hover:text-green-600 aria-[current=page]:bg-green-50 aria-[current=page]:text-green-600"
+                href="/check-numbers"
+                aria-current={pathname === "/check-numbers" ? "page" : undefined}
+              >
+                Number Checker
+              </a>
+              <a 
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-green-50 hover:text-green-600 aria-[current=page]:bg-green-50 aria-[current=page]:text-green-600"
+                href="/number-generator"
+                aria-current={pathname === "/number-generator" ? "page" : undefined}
+              >
+                Number Generator
               </a>
             </nav>
           </div>

@@ -1,6 +1,15 @@
 import PageContainer from "@/components/page-container";
 import { ChevronRight } from "lucide-react";
 import Script from 'next/script';
+import { Metadata } from "next";
+import { constructMetadata } from "../seo.config";
+import JsonLd from "@/components/json-ld";
+
+export const metadata: Metadata = constructMetadata({
+  title: "Frequently Asked Questions | Irish Lotto Results",
+  description: "Find answers to common questions about Irish Lotto results, draw times, and how to use our website.",
+  url: "https://www.irishlottoresults.co.uk/faq",
+});
 
 const faqs = [
   {
@@ -38,81 +47,57 @@ const faqs = [
 ];
 
 export default function FAQ() {
-  // FAQ Schema
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  };
-
   return (
     <>
       <Script id="faq-schema" type="application/ld+json">
-        {JSON.stringify(faqSchema)}
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.question,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": faq.answer
+            }
+          }))
+        })}
       </Script>
-
+      
       <PageContainer 
         title="Frequently Asked Questions" 
-        subtitle="Find answers to common questions about Irish Lotto Results"
+        subtitle="Find answers to common questions about Irish Lotto results and our website."
       >
-        <div className="space-y-8">
-          {/* FAQ Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="max-w-4xl mx-auto space-y-8">
+          {/* FAQ Items */}
+          <div className="space-y-6">
             {faqs.map((faq, index) => (
-              <div 
-                key={index}
-                className="p-6 bg-white rounded-xl border border-gray-100 hover:border-green-100 transition-colors group"
-                itemScope
-                itemType="https://schema.org/Question"
-              >
-                <div className="flex items-start space-x-4">
-                  <div className="bg-green-50 rounded-full p-2 mt-1">
-                    <ChevronRight className="w-4 h-4 text-green-600 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2" itemProp="name">
-                      {faq.question}
-                    </h3>
-                    <div itemScope itemType="https://schema.org/Answer" itemProp="acceptedAnswer">
-                      <p className="text-muted-foreground text-sm leading-relaxed" itemProp="text">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  </div>
+              <div key={index} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <h3 className="text-xl font-semibold text-gray-900 mb-3 flex items-start gap-3">
+                  <span className="bg-blue-100 text-blue-700 rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">
+                    Q
+                  </span>
+                  {faq.question}
+                </h3>
+                <div className="pl-11">
+                  <p className="text-gray-600">{faq.answer}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Additional Help */}
-          <div className="mt-12 p-6 bg-green-50 rounded-xl border border-green-100">
-            <h3 className="text-lg font-semibold text-green-800 mb-4">
-              Need More Help?
-            </h3>
-            <p className="text-green-700 mb-4">
-              If you couldn't find the answer you're looking for, our support team is here to help.
+          {/* Contact Section */}
+          <div className="bg-blue-50 rounded-xl p-6 border border-blue-100">
+            <h3 className="text-xl font-semibold text-gray-900 mb-3">Still have questions?</h3>
+            <p className="text-gray-600 mb-4">
+              If you couldn't find the answer to your question, please feel free to contact us.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <a 
-                href="/contact"
-                className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-              >
-                Contact Support
-              </a>
-              <a 
-                href="mailto:contact@irishlottoresults.co.uk"
-                className="inline-flex items-center px-4 py-2 bg-white text-green-600 border border-green-200 rounded-lg hover:bg-green-50 transition-colors"
-              >
-                Email Us
-              </a>
-            </div>
+            <a 
+              href="/contact" 
+              className="inline-flex items-center text-blue-600 font-medium hover:text-blue-800"
+            >
+              Contact Support <ChevronRight className="h-4 w-4 ml-1" />
+            </a>
           </div>
         </div>
       </PageContainer>

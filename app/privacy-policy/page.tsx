@@ -1,4 +1,13 @@
 import PageContainer from "@/components/page-container";
+import { Metadata } from "next";
+import { constructMetadata } from "../seo.config";
+import JsonLd from "@/components/json-ld";
+
+export const metadata: Metadata = constructMetadata({
+  title: "Privacy Policy | Irish Lotto Results",
+  description: "Our privacy policy explains how we collect, use, and protect your personal information when using the Irish Lotto Results website.",
+  url: "https://www.irishlottoresults.co.uk/privacy-policy",
+});
 
 export default function PrivacyPolicy() {
   return (
@@ -6,6 +15,12 @@ export default function PrivacyPolicy() {
       title="Privacy Policy" 
       subtitle="Last updated: February 14, 2025"
     >
+      <JsonLd type="BreadcrumbList" data={{
+        items: [
+          { name: "Home", url: "/" },
+          { name: "Privacy Policy", url: "/privacy-policy" }
+        ]
+      }} />
       <div className="prose prose-green max-w-none">
         <h2>Introduction</h2>
         <p>

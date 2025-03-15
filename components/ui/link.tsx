@@ -1,7 +1,6 @@
 'use client'
 
 import NextLink from 'next/link'
-import { useLoading } from '../loading-provider'
 import type { LinkProps as NextLinkProps } from 'next/link'
 
 interface LinkProps extends NextLinkProps {
@@ -10,14 +9,8 @@ interface LinkProps extends NextLinkProps {
 }
 
 export function Link({ children, className = "", ...props }: LinkProps) {
-  const { setIsLoading } = useLoading()
-
-  const handleClick = () => {
-    setIsLoading(true)
-  }
-
   return (
-    <NextLink className={className} onClick={handleClick} {...props}>
+    <NextLink className={className} {...props}>
       {children}
     </NextLink>
   )

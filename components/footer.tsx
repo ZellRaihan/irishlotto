@@ -86,6 +86,18 @@ const Footer = () => {
                 Results History
               </Link>
               <Link 
+                href="/number-generator" 
+                className="block text-gray-600 hover:text-green-600 transition-colors"
+              >
+                Number Generator
+              </Link>
+              <Link 
+                href="/check-numbers" 
+                className="block text-gray-600 hover:text-green-600 transition-colors"
+              >
+                Number Checker
+              </Link>
+              <Link 
                 href="/how-to-play" 
                 className="block text-gray-600 hover:text-green-600 transition-colors"
               >

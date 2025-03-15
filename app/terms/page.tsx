@@ -1,4 +1,13 @@
 import PageContainer from "@/components/page-container";
+import { Metadata } from "next";
+import { constructMetadata } from "../seo.config";
+import JsonLd from "@/components/json-ld";
+
+export const metadata: Metadata = constructMetadata({
+  title: "Terms & Conditions | Irish Lotto Results",
+  description: "Read our terms and conditions for using the Irish Lotto Results website. Last updated February 14, 2025.",
+  url: "https://www.irishlottoresults.co.uk/terms",
+});
 
 export default function Terms() {
   return (
@@ -6,6 +15,12 @@ export default function Terms() {
       title="Terms & Conditions" 
       subtitle="Last updated: February 14, 2025"
     >
+      <JsonLd type="BreadcrumbList" data={{
+        items: [
+          { name: "Home", url: "/" },
+          { name: "Terms & Conditions", url: "/terms" }
+        ]
+      }} />
       <div className="prose prose-green max-w-none">
         <h2>1. Acceptance of Terms</h2>
         <p>

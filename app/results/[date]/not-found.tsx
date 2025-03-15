@@ -2,15 +2,12 @@ import { Metadata } from "next"
 import { constructMetadata } from "@/app/seo.config"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Timer, Calendar } from "lucide-react"
-import { isSaturday, isWednesday, nextWednesday, nextSaturday, format, addDays, differenceInDays, isSameDay } from "date-fns"
+import { Calendar, Home, ArrowLeft } from "lucide-react"
+import { format } from "date-fns"
 import { Breadcrumbs } from "@/components/breadcrumbs"
-import LotteryDatePicker from "@/components/lottery-date-picker"
-import { formatDublinDate, getCurrentDublinTime, convertToDublinTime } from "@/utils/formatters"
 import clientPromise, { DB_NAME } from "@/lib/mongodb"
 import type { LotteryDraw } from "@/types/lottery"
-import { notFound } from "next/navigation"
-import { toZonedTime, formatInTimeZone } from "date-fns-tz"
+import JsonLd from "@/components/json-ld"
 
 // This function will be used in the main page.tsx to check if result exists
 export async function checkResultExists(date: string): Promise<boolean> {
@@ -49,104 +46,149 @@ async function getLatestResult(): Promise<LotteryDraw | null> {
 }
 
 function getNextDrawDate(date: Date): Date {
-  // Define Dublin timezone
-  const DUBLIN_TIMEZONE = 'Europe/Dublin';
+  const currentDay = date.getDay()
   
-  // Convert to Dublin timezone using formatInTimeZone for consistency
-  const dateString = formatInTimeZone(
-    new Date(date),
-    DUBLIN_TIMEZONE,
-    'yyyy-MM-dd\'T\'HH:mm:ss.SSS'
-  );
-  const dublinDate = new Date(dateString);
+  // If Wednesday (3), next draw is Saturday
+  if (currentDay === 3) {
+    const nextDate = new Date(date)
+    nextDate.setDate(date.getDate() + 3) // Saturday is 3 days after Wednesday
+    return nextDate
+  }
   
-  if (isWednesday(dublinDate)) {
-    return nextSaturday(dublinDate)
+  // If Saturday (6), next draw is Wednesday
+  if (currentDay === 6) {
+    const nextDate = new Date(date)
+    nextDate.setDate(date.getDate() + 4) // Wednesday is 4 days after Saturday
+    return nextDate
   }
-  if (isSaturday(dublinDate)) {
-    return nextWednesday(addDays(dublinDate, 1))
+  
+  // For any other day, find the next Wednesday or Saturday
+  const daysToWednesday = (3 - currentDay + 7) % 7
+  const daysToSaturday = (6 - currentDay + 7) % 7
+  
+  // Return the closest upcoming draw day
+  if (daysToWednesday < daysToSaturday) {
+    const nextDate = new Date(date)
+    nextDate.setDate(date.getDate() + daysToWednesday)
+    return nextDate
+  } else {
+    const nextDate = new Date(date)
+    nextDate.setDate(date.getDate() + daysToSaturday)
+    return nextDate
   }
-  const nextWed = nextWednesday(dublinDate)
-  const nextSat = nextSaturday(dublinDate)
-  return nextWed < nextSat ? nextWed : nextSat
 }
 
-function shouldShowComingSoon(requestedDate: Date, latestResult: LotteryDraw | null): boolean {
-  if (!latestResult) return false
+// Generate metadata at request time
+export async function generateMetadata({ params }: { params: { date: string } }): Promise<Metadata> {
+  try {
+    const currentDate = new Date(params.date)
+    
+    // If date is invalid, return generic metadata
+    if (isNaN(currentDate.getTime())) {
+      return constructMetadata({
+        title: "Result Not Found | Irish Lotto Results",
+        description: "The lottery result you're looking for could not be found. Please check the date and try again.",
+        type: "website"
+      })
+    }
+    
+    const nextDraw = getNextDrawDate(currentDate)
+    const formattedDate = format(currentDate, "MMMM d, yyyy")
+    const formattedNextDraw = format(nextDraw, "EEEE, MMMM d")
 
-  // Get current time in Dublin timezone using the utility function
-  const now = getCurrentDublinTime();
-  
-  // Convert dates to Dublin timezone using our utility function
-  const requestedDateDublin = convertToDublinTime(requestedDate);
-  
-  // If it's today but before 8 PM in Dublin, show coming soon
-  // This is critical for users in different time zones
-  if (isSameDay(requestedDateDublin, now) && now.getHours() < 20) {
-    return true;
+    return constructMetadata({
+      title: `Irish Lotto Results Not Found - ${formattedDate}`,
+      description: `Irish Lotto results for ${formattedDate} are not available. The next draw will be on ${formattedNextDraw}. Check back soon for the latest winning numbers and prizes.`,
+      type: "website"
+    })
+  } catch (error) {
+    // Fallback metadata
+    return constructMetadata({
+      title: "Result Not Found | Irish Lotto Results",
+      description: "The lottery result you're looking for could not be found. Please check the date and try again.",
+      type: "website"
+    })
   }
-  
-  // If requested date is in the future, show coming soon
-  if (requestedDateDublin > now) return true
-
-  // If latest result is more than 2 days old and requested date is after latest result
-  const latestResultDateDublin = convertToDublinTime(new Date(latestResult.drawDate));
-  const daysSinceLastDraw = differenceInDays(now, latestResultDateDublin);
-  if (daysSinceLastDraw >= 2 && requestedDateDublin > latestResultDateDublin) {
-    return true
-  }
-
-  return false
 }
 
 export default async function NotFound() {
-  // This is a not-found page, so we should just show the not found message
+  // Get the latest result to show as a suggestion
+  const latestResult = await getLatestResult()
+  const latestDate = latestResult ? new Date(latestResult.drawDate) : new Date()
+  
   return (
     <div className="max-w-4xl mx-auto p-4 py-8 space-y-8">
+      <JsonLd type="BreadcrumbList" data={{
+        items: [
+          { name: "Home", url: "/" },
+          { name: "Results", url: "/results/history" },
+          { name: "Not Found", url: "" }
+        ]
+      }} />
+      
       <div className="space-y-6">
         <Breadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Results", href: "/results/archive" },
+            { label: "Results", href: "/results/history" },
             { label: "Not Found" }
           ]}
         />
 
-        <div className="text-center">
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-50 mb-4">
+            <Calendar className="w-8 h-8 text-red-500" />
+          </div>
+          
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
             Result Not Found
           </h1>
-          <p className="text-gray-600 mb-8">
-            The lottery result you're looking for could not be found. Please check the date and try again.
+          
+          <p className="text-gray-600 mb-8 max-w-lg mx-auto">
+            The lottery result you're looking for could not be found. This could be because:
           </p>
+          
+          <ul className="text-left max-w-md mx-auto mb-8 space-y-2 text-gray-600">
+            <li className="flex items-start gap-2">
+              <span className="text-red-500 font-bold">•</span>
+              <span>The date format is incorrect (should be YYYY-MM-DD)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-red-500 font-bold">•</span>
+              <span>There was no draw on this date</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-red-500 font-bold">•</span>
+              <span>The result hasn't been added to our database yet</span>
+            </li>
+          </ul>
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild variant="outline">
-              <Link href="/" className="gap-2">
-                <Calendar className="w-4 h-4" />
+            <Button asChild variant="default" className="gap-2">
+              <Link href="/">
+                <Home className="w-4 h-4" />
                 View Latest Results
               </Link>
             </Button>
-            <Button asChild>
-              <Link href="/results/archive" className="gap-2">
+            
+            <Button asChild variant="outline" className="gap-2">
+              <Link href="/results/history">
                 <Calendar className="w-4 h-4" />
                 Browse Past Results
               </Link>
             </Button>
+            
+            {latestResult && (
+              <Button asChild variant="outline" className="gap-2">
+                <Link href={`/results/${format(latestDate, "yyyy-MM-dd")}`}>
+                  <ArrowLeft className="w-4 h-4" />
+                  Latest Available Result
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
       </div>
     </div>
   )
-}
-
-// Generate metadata at request time
-export async function generateMetadata({ params }: { params: { date: string } }): Promise<Metadata> {
-  const currentDate = new Date(params.date)
-  const nextDraw = getNextDrawDate(currentDate)
-
-  return constructMetadata({
-    title: `Irish Lotto Results Coming Soon - ${format(currentDate, "EEEE, MMMM d, yyyy")}`,
-    description: `Irish Lotto results for ${format(currentDate, "MMMM d, yyyy")} are not available yet. The next draw will be on ${format(nextDraw, "EEEE, MMMM d")}. Check back soon for the latest winning numbers and prizes.`,
-    type: "website"
-  })
 }

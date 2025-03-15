@@ -350,6 +350,11 @@ export default async function Home() {
               View Prize Breakdown
             </Button>
           </Link>
+          <Link href="/check-numbers" passHref>
+            <Button className="bg-blue-500 text-white hover:bg-blue-600 w-full sm:w-auto">
+              Check Your Numbers
+            </Button>
+          </Link>
         </div>
         
         {/* Next Draw Coming Soon Box - Only show when not showing the larger coming soon message */}

@@ -14,6 +14,7 @@ import { checkResultExists } from "./not-found"
 import { isSaturday, isWednesday, nextWednesday, nextSaturday, format, addDays, differenceInDays, isSameDay } from "date-fns"
 import { NextDrawInfo } from "@/app/components/next-draw-info"
 import { toZonedTime, formatInTimeZone } from "date-fns-tz"
+import JsonLd from "@/components/json-ld"
 
 // Force SSR
 export const dynamic = 'force-dynamic'
@@ -267,18 +268,41 @@ function shouldShowComingSoon(requestedDate: Date, latestResult: LotteryDraw | n
   return false;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const currentDate = new Date(params.date)
-  const nextDraw = getNextDrawDate(currentDate)
-
-  // Format the date like "12th February Wednesday 2025"
-  const formattedDate = `${formatFullDate(currentDate)} Irish Lotto Results`
-
-  return constructMetadata({
-    title: formattedDate,
-    description: `Check Irish Lotto results for ${format(currentDate, "do MMMM yyyy")}. View winning numbers, prize breakdowns, and jackpot amounts for all draws - Main Draw, Plus 1, and Plus 2.`,
-    type: "website"
-  })
+// Generate metadata at request time
+export async function generateMetadata({ params }: { params: { date: string } }): Promise<Metadata> {
+  try {
+    const result = await getLotteryResult(params.date);
+    
+    if (result) {
+      const formattedDate = formatDate(result.drawDate);
+      const jackpotAmount = formatCurrency(result.mainDraw.jackpotAmount);
+      
+      return constructMetadata({
+        title: `Irish Lotto Results for ${formattedDate} - Winning Numbers & Prizes`,
+        description: `Irish Lotto results for ${formattedDate}. Jackpot: ${jackpotAmount}. Check winning numbers and prize breakdown for the main draw, Plus 1, and Plus 2.`,
+        url: `https://www.irishlottoresults.co.uk/results/${params.date}`,
+        type: "article"
+      });
+    } else {
+      // For coming soon or not found pages
+      const currentDate = new Date(params.date);
+      const formattedDate = format(currentDate, "MMMM d, yyyy");
+      
+      return constructMetadata({
+        title: `Irish Lotto Results for ${formattedDate} - Coming Soon`,
+        description: `Irish Lotto results for ${formattedDate} will be available soon after the draw. Check back for winning numbers and prize breakdown.`,
+        url: `https://www.irishlottoresults.co.uk/results/${params.date}`,
+        type: "website"
+      });
+    }
+  } catch (error) {
+    // Fallback metadata
+    return constructMetadata({
+      title: "Irish Lotto Results",
+      description: "Check the latest Irish Lotto results, winning numbers, and prize breakdowns.",
+      url: "https://www.irishlottoresults.co.uk/results",
+    });
+  }
 }
 
 export default async function LotteryResults({ params }: Props) {
@@ -308,11 +332,19 @@ export default async function LotteryResults({ params }: Props) {
 
       return (
         <div className="max-w-4xl mx-auto p-4 py-8 space-y-8">
+          <JsonLd type="BreadcrumbList" data={{
+            items: [
+              { name: "Home", url: "/" },
+              { name: "Results", url: "/results/history" },
+              { name: format(currentDate, "MMMM d, yyyy"), url: `/results/${params.date}` }
+            ]
+          }} />
+          
           <div className="space-y-6">
             <Breadcrumbs
               items={[
                 { label: "Home", href: "/" },
-                { label: "Results", href: "/results/archive" },
+                { label: "Results", href: "/results/history" },
                 { label: format(currentDate, "MMMM d, yyyy") }
               ]}
             />
@@ -350,6 +382,23 @@ export default async function LotteryResults({ params }: Props) {
 
   return (
     <div className="max-w-4xl mx-auto p-4 py-8 space-y-8">
+      <JsonLd type="BreadcrumbList" data={{
+        items: [
+          { name: "Home", url: "/" },
+          { name: "Results", url: "/results/archive" },
+          { name: formatDate(result.drawDate), url: `/results/${params.date}` }
+        ]
+      }} />
+      
+      <JsonLd type="LotteryResult" data={{
+        _id: params.date,
+        drawDate: result.drawDate,
+        mainDraw: {
+          jackpotAmount: result.mainDraw.jackpotAmount,
+          winningNumbers: result.mainDraw.winningNumbers
+        }
+      }} />
+      
       <div className="space-y-6">
         <Breadcrumbs
           items={[

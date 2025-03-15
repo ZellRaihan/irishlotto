@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/popover"
 import { useRouter } from "next/navigation"
 import { enIE } from "date-fns/locale"
-import { useLoading } from "./loading-provider"
 import { useState } from "react"
 
 export interface LotteryDatePickerProps {
@@ -22,7 +21,6 @@ export interface LotteryDatePickerProps {
 
 export default function LotteryDatePicker({ selected, className }: LotteryDatePickerProps) {
   const router = useRouter();
-  const { setIsLoading } = useLoading();
   const [isOpen, setIsOpen] = useState(false);
 
   // Function to check if a date is a lottery day (Wednesday or Saturday)
@@ -46,17 +44,12 @@ export default function LotteryDatePicker({ selected, className }: LotteryDatePi
     
     // Only navigate if a different date is selected
     setIsOpen(false);
-    setIsLoading(true);
     const formattedDate = format(date, "yyyy-MM-dd");
     router.push(`/results/${formattedDate}`);
   }
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
-    if (!open) {
-      // When closing without selecting a date, ensure loading is off
-      setIsLoading(false);
-    }
   }
 
   return (

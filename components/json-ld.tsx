@@ -1,6 +1,7 @@
 'use client';
 
 import { formatDate } from "@/utils/formatters";
+import { siteConfig } from "@/app/seo.config";
 
 type JsonLdProps = {
   type: "LotteryResult" | "Website" | "Organization" | "BreadcrumbList" | "Article";
@@ -16,8 +17,8 @@ export default function JsonLd({ type, data }: JsonLdProps) {
         "@context": "https://schema.org",
         "@type": "WebSite",
         name: "Irish Lotto Results",
-        url: "https://www.irishlottoresults.co.uk",
-        description: "Get the latest Irish Lotto results, check winning numbers, and view historical draws.",
+        url: siteConfig.url,
+        description: siteConfig.description,
         potentialAction: {
           "@type": "SearchAction",
           target: "https://www.irishlottoresults.co.uk/results/history?date={search_term_string}",
@@ -30,13 +31,17 @@ export default function JsonLd({ type, data }: JsonLdProps) {
       schema = {
         "@context": "https://schema.org",
         "@type": "Organization",
-        name: "Irish Lotto Results",
-        url: "https://www.irishlottoresults.co.uk",
-        logo: "https://www.irishlottoresults.co.uk/logo.png",
+        name: siteConfig.name,
+        url: siteConfig.url,
+        logo: `${siteConfig.url}/logo.png`,
         sameAs: [
-          "https://www.facebook.com/irishlottoresults",
-          "https://twitter.com/irishlotto",
-        ],
+          siteConfig.social.facebook,
+          siteConfig.social.twitter,
+          siteConfig.social.instagram,
+          siteConfig.social.youtube,
+          siteConfig.social.linkedin,
+          siteConfig.social.pinterest,
+        ].filter(Boolean),
       };
       break;
 

@@ -15,8 +15,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Base URL for all routes
     const baseUrl = process.env.NODE_ENV === 'production'
-      ? 'https://www.irishlottoresults.co.uk'
-      : 'http://localhost:3000'
+      ? "https://www.irishlottoresults.co.uk"
+      : "http://localhost:3000"
 
     // Create URLs for each lottery result
     const resultUrls = results.map((result) => ({
@@ -38,6 +38,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${baseUrl}/results/history`,
         lastModified: new Date(),
         changeFrequency: 'daily' as const,
+        priority: 0.8,
+      },
+      {
+        url: `${baseUrl}/number-generator`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: `${baseUrl}/check-numbers`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
         priority: 0.8,
       },
       {
@@ -64,6 +76,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'yearly' as const,
         priority: 0.4,
       },
+      {
+        url: `${baseUrl}/responsible-gaming`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      },
+      {
+        url: `${baseUrl}/how-to-play`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+      }
     ]
 
     // Combine all routes
@@ -77,6 +101,54 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: 'always' as const,
         priority: 1,
+      },
+      {
+        url: 'https://www.irishlottoresults.co.uk/number-generator',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.irishlottoresults.co.uk/check-numbers',
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      },
+      {
+        url: 'https://www.irishlottoresults.co.uk/faq',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      },
+      {
+        url: 'https://www.irishlottoresults.co.uk/contact',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      },
+      {
+        url: 'https://www.irishlottoresults.co.uk/privacy-policy',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.5,
+      },
+      {
+        url: 'https://www.irishlottoresults.co.uk/terms',
+        lastModified: new Date(),
+        changeFrequency: 'yearly' as const,
+        priority: 0.4,
+      },
+      {
+        url: 'https://www.irishlottoresults.co.uk/responsible-gaming',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      },
+      {
+        url: 'https://www.irishlottoresults.co.uk/how-to-play',
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
       }
     ]
   }

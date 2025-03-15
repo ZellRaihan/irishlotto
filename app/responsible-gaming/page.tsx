@@ -3,6 +3,7 @@ import { constructMetadata } from "../seo.config"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle, BrainCircuit, Clock, Heart, HelpCircle, Phone, Shield, Target } from "lucide-react"
 import Link from "next/link"
+import JsonLd from "@/components/json-ld"
 
 export const metadata: Metadata = constructMetadata({
   title: "Responsible Gaming | Play Safe & Stay in Control",
@@ -15,12 +16,26 @@ export const metadata: Metadata = constructMetadata({
     "Irish Lotto Responsible Play",
     "Gambling Limits",
     "Gambling Addiction Help"
-  ]
+  ],
+  url: "https://www.irishlottoresults.co.uk/responsible-gaming",
 })
 
 export default function ResponsibleGaming() {
   return (
     <main className="container max-w-5xl py-6 space-y-8">
+      <JsonLd type="BreadcrumbList" data={{
+        items: [
+          { name: "Home", url: "/" },
+          { name: "Responsible Gaming", url: "/responsible-gaming" }
+        ]
+      }} />
+      <JsonLd type="Article" data={{
+        title: "Responsible Gaming | Play Safe & Stay in Control",
+        description: "Learn about responsible gaming practices, set limits, and find support. Your wellbeing matters when playing Irish Lotto.",
+        image: "/responsible-gaming.jpg",
+        date: new Date().toISOString()
+      }} />
+      
       {/* Hero Section */}
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold tracking-tight">Responsible Gaming</h1>

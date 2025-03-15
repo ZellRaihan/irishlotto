@@ -1,5 +1,15 @@
 import PageContainer from "@/components/page-container";
-import { Mail, MessageSquare, Clock, AlertCircle } from "lucide-react";
+import { Mail, MessageSquare, Clock, AlertCircle, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { Metadata } from "next";
+import { constructMetadata } from "../seo.config";
+import JsonLd from "@/components/json-ld";
+
+export const metadata: Metadata = constructMetadata({
+  title: "Contact Us | Irish Lotto Results",
+  description: "Get in touch with our support team for any questions about Irish Lotto results or our website.",
+  url: "https://www.irishlottoresults.co.uk/contact",
+});
 
 export default function Contact() {
   return (
@@ -7,6 +17,12 @@ export default function Contact() {
       title="Contact Us" 
       subtitle="We're here to help! Get in touch with us"
     >
+      <JsonLd type="BreadcrumbList" data={{
+        items: [
+          { name: "Home", url: "/" },
+          { name: "Contact Us", url: "/contact" }
+        ]
+      }} />
       <div className="space-y-12">
         {/* Contact Methods */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -85,6 +101,11 @@ export default function Contact() {
                 </p>
               </div>
             </div>
+          </div>
+          <div className="text-center mt-6">
+            <Link href="/faq" className="text-blue-600 hover:text-blue-800 font-medium flex items-center justify-center gap-1">
+              View all FAQs <ChevronRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
 
