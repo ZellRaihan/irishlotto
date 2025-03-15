@@ -8,6 +8,7 @@ import JsonLd from '@/components/json-ld'
 import { cn } from '@/lib/utils'
 import Script from 'next/script'
 import { Toaster } from 'sonner'
+import { LoadingProvider } from '@/components/loading-provider'
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -125,18 +126,20 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased", inter.className)}>
-        <div className="relative flex min-h-screen flex-col">
-          <Header />
-          <div className="flex-1">
-            <main className="py-6">
-              {children}
-            </main>
+        <LoadingProvider initialLoadDelay={500}>
+          <div className="relative flex min-h-screen flex-col">
+            <Header />
+            <div className="flex-1">
+              <main>
+                {children}
+              </main>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
-        <Toaster position="top-right" richColors closeButton />
-        <JsonLd type="Website" />
-        <JsonLd type="Organization" />
+          <Toaster position="top-right" richColors closeButton />
+          <JsonLd type="Website" />
+          <JsonLd type="Organization" />
+        </LoadingProvider>
       </body>
     </html>
   )

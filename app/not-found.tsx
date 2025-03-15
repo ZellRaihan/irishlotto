@@ -8,38 +8,48 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = constructMetadata({
   title: "Page Not Found | Irish Lotto Results",
-  description: "The page you're looking for could not be found. Browse our latest lottery results or search for specific dates.",
+  description: "The page you are looking for does not exist. Please check the URL or navigate back to the homepage.",
+  type: "website",
 })
 
 export default function NotFound() {
   return (
-    <div className="container max-w-4xl mx-auto px-4 py-16 text-center">
-      <div className="space-y-6">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-50 mb-4">
-          <span className="text-4xl font-bold text-blue-600">404</span>
+    <div className="min-h-[70vh] flex flex-col items-center justify-center p-4 text-center">
+      <div className="max-w-md space-y-6">
+        <div className="space-y-2">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-8 h-8 text-blue-600"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+              />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-800">Page Not Found</h1>
+          <p className="text-gray-600">
+            The page you are looking for doesn't exist or has been moved.
+          </p>
         </div>
-        
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">Page Not Found</h1>
-        
-        <p className="text-lg text-gray-600 max-w-lg mx-auto">
-          The page you're looking for doesn't exist or has been moved. 
-          Please check the URL or try one of the options below.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-          <Button asChild variant="default" className="gap-2">
-            <Link href="/">
-              <Home className="w-4 h-4" />
-              Go to Homepage
-            </Link>
-          </Button>
-          
-          <Button asChild variant="outline" className="gap-2">
-            <Link href="/results/history">
-              <Calendar className="w-4 h-4" />
-              Browse Results History
-            </Link>
-          </Button>
+
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link href="/" passHref>
+            <Button className="bg-blue-600 hover:bg-blue-700">
+              Go to homepage
+            </Button>
+          </Link>
+          <Link href="/results/history" passHref>
+            <Button variant="outline" className="border-gray-300 text-gray-700">
+              View Results History
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

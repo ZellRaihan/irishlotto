@@ -166,18 +166,18 @@ function ResultBox({
   return (
     <div
       className={clsx(
-        "bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md",
+        "bg-white/90 backdrop-blur-sm rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md border border-gray-100",
         isHighlighted && "ring-2 ring-blue-500"
       )}
     >
       {/* Header */}
-      <div className="px-4 py-3 border-b border-gray-100">
+      <div className="px-4 py-3 border-b border-gray-100 bg-gradient-to-r from-blue-50/50 to-indigo-50/50">
         <div className="flex items-start justify-between">
           <div className="w-24">
             <LotteryLogo variant={variant} className="h-8" />
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500 font-medium">Jackpot</div>
+            <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">Jackpot</div>
             <div className="text-base font-semibold text-green-600">
               {formatCurrency(jackpotAmount)}
             </div>
@@ -192,19 +192,23 @@ function ResultBox({
           {numbers.map((number, index) => (
             <div
               key={number}
-              className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center text-base font-semibold text-blue-700 transform transition-transform duration-300 hover:scale-110"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-base font-semibold text-blue-700 transform transition-all duration-300 hover:scale-110 hover:shadow-md relative"
+              style={{ 
+                animationDelay: `${index * 100}ms`,
+              }}
             >
-              {number}
+              <span className="relative z-10">{number}</span>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/10 to-indigo-400/10 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
             </div>
           ))}
         </div>
 
         {/* Bonus */}
         <div className="flex items-center justify-center gap-2">
-          <div className="text-sm font-medium text-gray-500">Bonus Ball</div>
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-50 to-yellow-50 flex items-center justify-center text-base font-semibold text-amber-600 transform transition-transform duration-300 hover:scale-110">
-            {bonus}
+          <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">Bonus Ball</div>
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-100 to-yellow-100 flex items-center justify-center text-base font-semibold text-amber-600 transform transition-all duration-300 hover:scale-110 hover:shadow-md relative">
+            <span className="relative z-10">{bonus}</span>
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-amber-400/10 to-yellow-400/10 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
           </div>
         </div>
       </div>
@@ -257,31 +261,38 @@ export default async function Home() {
       )}
 
       {/* Current Results - Hero Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-green-50 p-3 sm:p-4 rounded-xl shadow-sm">
-        <div className="text-center space-y-4">
-          <div className="space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+      <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 p-4 sm:p-6 rounded-xl shadow-sm relative overflow-hidden">
+        {/* Abstract background elements */}
+        <div className="absolute -top-12 -right-12 w-40 h-40 bg-blue-200/30 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-indigo-200/30 rounded-full blur-3xl"></div>
+        
+        <div className="relative z-10 text-center space-y-5">
+          <div className="space-y-3">
+            <div className="flex justify-center">
+              <div className="inline-block px-3 py-1 bg-blue-100/80 backdrop-blur-sm rounded-full text-xs font-semibold text-blue-700 tracking-wider uppercase mb-1">
+                Latest Results
+              </div>
+            </div>
+            <h1 className="text-3xl sm:text-5xl font-bold">
+              <span className="bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-700 bg-clip-text text-transparent">
                 Irish Lotto Results Tonight
               </span>
             </h1>
             <div className="flex justify-center">
-              <div className="inline-flex items-center text-lg sm:text-xl text-gray-600">
-                <div className="bg-blue-50 rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                  <Calendar className="w-5 h-5 text-blue-600" />
-                </div>
-                <span>{formatDublinDate(currentData.drawDate)}</span>
+              <div className="inline-flex items-center text-lg sm:text-xl text-gray-600 relative">
+                <div className="absolute -left-3 top-1/2 transform -translate-y-1/2 w-1 h-12 bg-gradient-to-b from-blue-400 to-indigo-600 rounded-full"></div>
+                <span className="pl-2 font-medium">{formatDublinDate(currentData.drawDate)}</span>
               </div>
             </div>
           </div>
-          <div className="inline-flex items-center bg-white rounded-lg shadow-sm p-1.5 border border-gray-100 hover:shadow-md transition-shadow duration-300">
+          <div className="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-lg shadow-sm p-1.5 border border-blue-100 hover:shadow-md transition-all duration-300 hover:bg-white">
             <LotteryDatePicker selected={new Date(currentData.drawDate)} />
           </div>
         </div>
 
         {showComingSoon && (
           <div className="mt-8 sm:mt-10">
-            <div className="mb-8 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-4 sm:p-6 hover:shadow-md transition-shadow duration-300">
+            <div className="mb-8 bg-gradient-to-br from-blue-50/90 to-indigo-50/90 backdrop-blur-sm border border-blue-100 rounded-xl p-4 sm:p-6 hover:shadow-md transition-all duration-300">
               <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
                 <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                   <Timer className="w-6 h-6 text-blue-600" />
@@ -330,7 +341,6 @@ export default async function Home() {
             jackpotAmount={currentData.plusOne.jackpotAmount}
             numbers={currentData.plusOne.winningNumbers.standard}
             bonus={currentData.plusOne.winningNumbers.bonus}
-            isHighlighted={true}
           />
           <ResultBox
             variant="lottoPlus2"

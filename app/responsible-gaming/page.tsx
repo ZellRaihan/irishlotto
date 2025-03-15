@@ -22,7 +22,7 @@ export const metadata: Metadata = constructMetadata({
 
 export default function ResponsibleGaming() {
   return (
-    <main className="container max-w-5xl py-6 space-y-8">
+    <main className="container max-w-5xl space-y-8">
       <JsonLd type="BreadcrumbList" data={{
         items: [
           { name: "Home", url: "/" },

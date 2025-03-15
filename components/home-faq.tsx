@@ -52,7 +52,7 @@ export default function HomeFAQ() {
         {JSON.stringify(faqSchema)}
       </Script>
 
-      <div className="container px-4 py-6">
+      <div className="container px-4">
         <div className="text-center mb-4">
           <h2 className="text-3xl font-bold text-gray-900">
             Frequently Asked Questions

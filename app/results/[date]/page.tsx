@@ -15,27 +15,78 @@ import { isSaturday, isWednesday, nextWednesday, nextSaturday, format, addDays, 
 import { NextDrawInfo } from "@/app/components/next-draw-info"
 import { toZonedTime, formatInTimeZone } from "date-fns-tz"
 import JsonLd from "@/components/json-ld"
+import { Suspense } from "react"
+import { LotteryResultsSkeleton } from "@/components/ui/skeleton"
 
-// Force SSR
+// Force dynamic rendering but enable caching for faster repeat visits
 export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 300 // Cache for 5 minutes
+
+// Cache for getLotteryResult function
+const resultCache = new Map<string, { data: LotteryDraw | null, timestamp: number }>();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 async function getLotteryResult(date: string): Promise<LotteryDraw | null> {
   try {
+    // Check cache first
+    const now = Date.now();
+    const cached = resultCache.get(date);
+    
+    if (cached && (now - cached.timestamp) < CACHE_TTL) {
+      return cached.data;
+    }
+    
     const client = await clientPromise;
     const db = client.db(DB_NAME);
-
-    // Add cache-busting timestamp
-    const currentTimestamp = new Date().getTime()
 
     const result = await db
       .collection<LotteryDraw>("lottoresults")
       .findOne({ _id: date });
-
+    
+    // Update cache
+    resultCache.set(date, { data: result, timestamp: now });
+    
     return result;
   } catch (error) {
     console.error('Error fetching lottery result:', error);
     throw error;
+  }
+}
+
+// Prefetch adjacent dates to improve navigation performance
+async function prefetchAdjacentDates(date: string) {
+  try {
+    const currentDate = new Date(date);
+    
+    // Find previous and next lottery days
+    let prevDate = new Date(currentDate);
+    let nextDate = new Date(currentDate);
+    
+    // Find previous lottery day (Wednesday or Saturday)
+    while (!(isWednesday(prevDate) || isSaturday(prevDate))) {
+      prevDate = addDays(prevDate, -1);
+    }
+    
+    // Find next lottery day (Wednesday or Saturday)
+    while (!(isWednesday(nextDate) || isSaturday(nextDate))) {
+      nextDate = addDays(nextDate, 1);
+    }
+    
+    // Format dates for fetching
+    const prevDateStr = format(prevDate, "yyyy-MM-dd");
+    const nextDateStr = format(nextDate, "yyyy-MM-dd");
+    
+    // Prefetch in the background
+    if (prevDateStr !== date) {
+      getLotteryResult(prevDateStr).catch(() => {});
+    }
+    
+    if (nextDateStr !== date) {
+      getLotteryResult(nextDateStr).catch(() => {});
+    }
+  } catch (error) {
+    // Silently fail for prefetching
+    console.error('Error prefetching adjacent dates:', error);
   }
 }
 
@@ -305,6 +356,81 @@ export async function generateMetadata({ params }: { params: { date: string } })
   }
 }
 
+// Wrap the result fetching and rendering in a separate component
+async function ResultContent({ date }: { date: string }) {
+  const result = await getLotteryResult(date);
+
+  if (!result) {
+    notFound();
+  }
+  
+  // Prefetch adjacent dates in the background
+  prefetchAdjacentDates(date);
+
+  return (
+    <>
+      <JsonLd type="BreadcrumbList" data={{
+        items: [
+          { name: "Home", url: "/" },
+          { name: "Results", url: "/results/archive" },
+          { name: formatDate(result.drawDate), url: `/results/${date}` }
+        ]
+      }} />
+      
+      <JsonLd type="LotteryResult" data={{
+        _id: date,
+        drawDate: result.drawDate,
+        mainDraw: {
+          jackpotAmount: result.mainDraw.jackpotAmount,
+          winningNumbers: result.mainDraw.winningNumbers
+        }
+      }} />
+      
+      <div className="space-y-6">
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Results", href: "/results/archive" },
+            { label: formatDate(result.drawDate) }
+          ]}
+        />
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="space-y-2 text-center sm:text-left">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              {formatDublinDate(result.drawDate)}
+            </h1>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-1.5 border border-gray-100">
+            <LotteryDatePicker selected={new Date(result.drawDate)} />
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-8">
+        {[
+          { key: 'mainDraw', data: result.mainDraw },
+          { key: 'plusOne', data: result.plusOne },
+          { key: 'plusTwo', data: result.plusTwo }
+        ].map(({ key, data }) => (
+          <div key={key} className="bg-white rounded-xl shadow-sm p-4 space-y-4">
+            <ResultBox
+              gameType={data.gameType}
+              jackpotAmount={data.jackpotAmount}
+              numbers={data.winningNumbers.standard}
+              bonus={data.winningNumbers.bonus}
+            />
+            <p className="text-sm text-gray-600">{data.prizeMessage}</p>
+            <PrizeBreakdown prizes={data.prizes} />
+          </div>
+        ))}
+      </div>
+
+      <RaffleResults raffle={result.raffle} />
+    </>
+  )
+}
+
 export default async function LotteryResults({ params }: Props) {
   const currentDate = new Date(params.date)
 
@@ -313,8 +439,17 @@ export default async function LotteryResults({ params }: Props) {
     notFound()
   }
 
-  // Check if result exists for this date
-  const resultExists = await checkResultExists(params.date)
+  // Check if result exists for this date - use a more efficient check
+  let resultExists = false;
+  try {
+    // Try to get the result directly instead of using a separate check
+    const result = await getLotteryResult(params.date);
+    resultExists = !!result;
+  } catch (error) {
+    // If there's an error, assume the result doesn't exist
+    resultExists = false;
+  }
+
   if (!resultExists) {
     const latestResult = await getLatestResult()
 
@@ -374,72 +509,11 @@ export default async function LotteryResults({ params }: Props) {
     notFound()
   }
 
-  const result = await getLotteryResult(params.date);
-
-  if (!result) {
-    notFound();
-  }
-
   return (
     <div className="max-w-4xl mx-auto p-4 py-8 space-y-8">
-      <JsonLd type="BreadcrumbList" data={{
-        items: [
-          { name: "Home", url: "/" },
-          { name: "Results", url: "/results/archive" },
-          { name: formatDate(result.drawDate), url: `/results/${params.date}` }
-        ]
-      }} />
-      
-      <JsonLd type="LotteryResult" data={{
-        _id: params.date,
-        drawDate: result.drawDate,
-        mainDraw: {
-          jackpotAmount: result.mainDraw.jackpotAmount,
-          winningNumbers: result.mainDraw.winningNumbers
-        }
-      }} />
-      
-      <div className="space-y-6">
-        <Breadcrumbs
-          items={[
-            { label: "Home", href: "/" },
-            { label: "Results", href: "/results/archive" },
-            { label: formatDate(result.drawDate) }
-          ]}
-        />
-
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="space-y-2 text-center sm:text-left">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              {formatDublinDate(result.drawDate)}
-            </h1>
-          </div>
-          <div className="bg-white rounded-lg shadow-sm p-1.5 border border-gray-100">
-            <LotteryDatePicker selected={new Date(result.drawDate)} />
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-8">
-        {[
-          { key: 'mainDraw', data: result.mainDraw },
-          { key: 'plusOne', data: result.plusOne },
-          { key: 'plusTwo', data: result.plusTwo }
-        ].map(({ key, data }) => (
-          <div key={key} className="bg-white rounded-xl shadow-sm p-4 space-y-4">
-            <ResultBox
-              gameType={data.gameType}
-              jackpotAmount={data.jackpotAmount}
-              numbers={data.winningNumbers.standard}
-              bonus={data.winningNumbers.bonus}
-            />
-            <p className="text-sm text-gray-600">{data.prizeMessage}</p>
-            <PrizeBreakdown prizes={data.prizes} />
-          </div>
-        ))}
-      </div>
-
-      <RaffleResults raffle={result.raffle} />
+      <Suspense fallback={<LotteryResultsSkeleton />}>
+        <ResultContent date={params.date} />
+      </Suspense>
     </div>
   )
 }

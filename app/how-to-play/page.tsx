@@ -22,7 +22,7 @@ export const metadata: Metadata = constructMetadata({
 
 export default function HowToPlay() {
   return (
-    <main className="container max-w-5xl py-6 space-y-8">
+    <main className="container max-w-5xl space-y-8">
       {/* Hero Section */}
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold tracking-tight">How to Play Irish Lotto</h1>
