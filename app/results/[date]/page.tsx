@@ -153,16 +153,24 @@ function PrizeBreakdown({ prizes }: {
     prize: number;
   }>
 }) {
-  const defaultPrizes = [
-    { match: "Jackpot", winners: 1, prize: 2935144, prizeType: "cash" },
-    { match: "Match 5 + Bonus", winners: 0, prize: 32754, prizeType: "cash" },
-    { match: "Match 5", winners: 16, prize: 1228, prizeType: "cash" },
-    { match: "Match 4 + Bonus", winners: 25, prize: 198, prizeType: "cash" },
-    { match: "Match 4", winners: 515, prize: 62, prizeType: "cash" },
-    { match: "Match 3 + Bonus", winners: 654, prize: 33, prizeType: "cash" },
-    { match: "Match 3", winners: 9245, prize: 11, prizeType: "cash" },
-    { match: "Match 2 + Bonus", winners: 6550, prize: 3, prizeType: "daily_million" }
+  // Use the actual prizes from the database, or fall back to defaults if needed
+  const prizesToDisplay = prizes && prizes.length > 0 ? prizes : [
+    { match: "Jackpot", numberOfWinners: 0, prize: 0, prizeType: "cash" },
+    { match: "Match 5 + Bonus", numberOfWinners: 0, prize: 0, prizeType: "cash" },
+    { match: "Match 5", numberOfWinners: 0, prize: 0, prizeType: "cash" },
+    { match: "Match 4 + Bonus", numberOfWinners: 0, prize: 0, prizeType: "cash" },
+    { match: "Match 4", numberOfWinners: 0, prize: 0, prizeType: "cash" },
+    { match: "Match 3 + Bonus", numberOfWinners: 0, prize: 0, prizeType: "cash" },
+    { match: "Match 3", numberOfWinners: 0, prize: 0, prizeType: "cash" },
+    { match: "Match 2 + Bonus", numberOfWinners: 0, prize: 0, prizeType: "cash" }
   ];
+
+  // Format the number of winners with text
+  const formatWinners = (count: number): string => {
+    if (count === 0) return "No Winners";
+    if (count === 1) return "1 Winner";
+    return `${count.toLocaleString()} Winners`;
+  };
 
   return (
     <div className="mt-4 bg-white">
@@ -175,13 +183,13 @@ function PrizeBreakdown({ prizes }: {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
-          {defaultPrizes.map((prize, index) => (
+          {prizesToDisplay.map((prize, index) => (
             <tr key={index}>
               <td className="px-2 sm:px-3 py-1.5 text-[#333333]">
                 <div className="whitespace-nowrap">{prize.match}</div>
               </td>
               <td className="px-2 sm:px-3 py-1.5 text-right text-[#0066cc]">
-                <div className="whitespace-nowrap">{prize.winners}</div>
+                <div className="whitespace-nowrap">{formatWinners(prize.numberOfWinners)}</div>
               </td>
               <td className="px-2 sm:px-3 py-1.5 text-right">
                 {prize.prizeType === "daily_million" ? (

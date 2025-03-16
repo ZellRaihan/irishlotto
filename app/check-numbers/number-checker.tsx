@@ -17,6 +17,13 @@ interface NumberCheckerProps {
   latestResult: LotteryDraw
 }
 
+// Add this helper function outside the component
+function formatWinnerText(count: number): string {
+  if (count === 0) return "No Winners";
+  if (count === 1) return "1 Winner";
+  return `${count.toLocaleString()} Winners`;
+}
+
 export function NumberChecker({ latestResult }: NumberCheckerProps) {
   const [selectedGame, setSelectedGame] = useState<GameType>('mainDraw')
   const [numbers, setNumbers] = useState<Array<string | null>>(Array(6).fill(null))
